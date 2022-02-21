@@ -91,8 +91,8 @@ app.post('/room_management/panel_admin/list_of_employees', async (req, res) =>{
 app.post('/room_management/panel_admin/enable_disable_employee', async (req, res) =>{
     const {email} = req.body;
     try {
-        let EnOeDis = Admin.enable_disable(email);
-        res.status(200).send("employee with the email address " + email + " was successfully " + EnOeDis);
+        let EnOrDis = Admin.enable_disable(email);
+        res.status(200).send("employee with the email address " + email + " was successfully " + EnOrDis);
     }catch (err){
         res.status(Exception.get_status_by_Emessage(err)).send(err);
     }
