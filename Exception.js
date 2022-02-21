@@ -4,6 +4,8 @@ class Exception {
             case
             "please fill all the information"
             :
+            case "Invalid Credentials!"
+            :
                 return 400;
             case
             "Employee with the given Email Address doesn't exist!"

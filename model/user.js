@@ -84,6 +84,24 @@ class User {
     //TODO
     static login(email, password) {
 
+        if (!(email && password))
+            throw "please fill all the information"
+
+        const user = User.findObjectByKey("email", email);
+        if (user && bcrypt.compare(password, user.password)) {
+/*            const token = jwt.sign(
+                {user_id: user._id, email},
+                process.env.TOKEN_KEY,
+                {
+                    expiresIn: "2h",
+                }
+            );
+
+            // save user token
+            user.token = token;*/
+        } else
+            throw "Invalid Credentials!"
+
     }
 
     //TODO age log in nabashe antune biad!
@@ -149,7 +167,23 @@ class Admin extends User {
 
     //TODO
     static login(email, password) {
+        if (!(email && password))
+            throw "please fill all the information"
 
+        const user = User.findObjectByKey("email", email);
+        if (user && bcrypt.compare(password, user.password)) {
+            /*            const token = jwt.sign(
+                            {user_id: user._id, email},
+                            process.env.TOKEN_KEY,
+                            {
+                                expiresIn: "2h",
+                            }
+                        );
+
+                        // save user token
+                        user.token = token;*/
+        } else
+            throw "Invalid Credentials!"
     }
 
     static create_employee(name, family_name, email, password, phone_number, department, organization_level, office, working_hours, role, status) {
@@ -187,8 +221,7 @@ class Admin extends User {
                 employee.role = role;
             if (status)
                 employee.status = status;
-        }
-        else throw "Employee with the given Email Address doesn't exist!";
+        } else throw "Employee with the given Email Address doesn't exist!";
     }
 
     static view_detail_one_employee(email) {
@@ -206,8 +239,7 @@ class Admin extends User {
                 "Working Hours : " + employee.working_hours + "\n" +
                 "Role : " + employee.role + "\n" +
                 "Active / Not Active : " + employee.status;
-        }
-        else throw "employee with the given email address doesn't exist!"
+        } else throw "employee with the given email address doesn't exist!"
     }
 
     //TODO age login bud karaye lazem ro anjam bede!

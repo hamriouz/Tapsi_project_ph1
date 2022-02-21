@@ -46,31 +46,7 @@ app.post('/room_management/login/admin', async (req, res) => {
         res.status(Exception.get_status_by_Emessage(err)).send(err);
     }
 })
-/*
-    if (!(email && password)) {
-        res.status(400).send("All input is required");
-    }
 
-    //validate password:
-    const user = User.findObjectByKey("email", email);
-    if (user && bcrypt.compare(password, user.password)){
-        const token = jwt.sign(
-            { user_id: user._id, email },
-            process.env.TOKEN_KEY,
-            {
-                expiresIn: "2h",
-            }
-        );
-
-        // save user token
-        user.token = token;
-
-        res.status(200).send("The admin successfully logged in!");
-    }
-    else {
-        res.status(400).send("Invalid Credentials!")
-    }
-    */
 
 //TODO give token!
 app.post('/room_management/login/employee', async (req, res) =>{
