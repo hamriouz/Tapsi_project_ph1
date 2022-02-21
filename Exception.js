@@ -25,6 +25,10 @@ class Exception {
             "there aren't any employees in the given department!"
             :
                 return 409;
+            case
+            "employee with the given email address doesn't exist!"
+            :
+                return 409;
         }
     }
 }

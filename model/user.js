@@ -142,7 +142,7 @@ class Admin extends User{
     static login(email, password){
 
     }
-    //TODO
+
     static create_employee(name, family_name, email, password, phone_number, department, organization_level, office, working_hours, role, status){
         User.signUp(name, family_name, email, password, phone_number, department, organization_level, office, working_hours, role, status);
 
@@ -152,7 +152,8 @@ class Admin extends User{
         let all_employee = "";
         for (let employee in all_users){
             if (employee.status !== "admin"){
-                all_employee += employee.name + " " + employee.family_name + " : Department = " + employee.department + " Office = " + employee.office + "\n";
+                all_employee += employee.name + " " + employee.family_name + " : Department = " + employee.department +
+                    " Office = " + employee.office + "\n";
             }
         }
         return all_employee;
@@ -162,8 +163,20 @@ class Admin extends User{
 
     }
     //TODO age login bud karaye lazem ro anjam bede!
-    static enable_disable(){
-
+    static enable_disable(email_address){
+        let enOrDis;
+        let employee = User.findObjectByKey("email_address", email_address);
+        if (employee !== null) {
+            if (employee.status === "enable") {
+                enOrDis = "disabled";
+                employee.status = "disable"
+            } else {
+                enOrDis = "enabled";
+                employee.status = "enable";
+            }
+            return enOrDis;
+        }
+        else throw "employee with the given email address doesn't exist!"
     }
 
 

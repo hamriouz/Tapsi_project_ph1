@@ -35,6 +35,7 @@ app.post('/room_management/sign_up/employee', async (req, res) =>{
     }
 })
 
+//TODO give token!
 app.post('/room_management/login/admin', async (req, res) => {
     const {email, password} = req.body;
     try {
@@ -70,6 +71,7 @@ app.post('/room_management/login/admin', async (req, res) => {
     }
     */
 
+//TODO give token!
 app.post('/room_management/login/employee', async (req, res) =>{
     const { email, password } = req.body;
     try {
@@ -80,7 +82,7 @@ app.post('/room_management/login/employee', async (req, res) =>{
     }
 })
 
-app.post('/room_management/panel_admin/list_of_employee', async (req, res) =>{
+app.post('/room_management/panel_admin/list_of_employees', async (req, res) =>{
     let list = Admin.view_list_employees();
     res.status(201).send(list);
 })
