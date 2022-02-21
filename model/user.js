@@ -113,7 +113,7 @@ class User {
     }
 
     see_working_hour(email_address) {
-        let wanted_employee = User.findObjectByKey("email_address", email_address);
+        let wanted_employee = User.findObjectByKey("email", email_address);
         if (wanted_employee == null)
             throw "Employee with the given Email Address doesn't exist!"
         return wanted_employee.working_hours;
@@ -191,7 +191,6 @@ class Admin extends User {
         else throw "Employee with the given Email Address doesn't exist!";
     }
 
-
     static view_detail_one_employee(email) {
         if (!email)
             throw "please fill all the information"
@@ -214,7 +213,7 @@ class Admin extends User {
     //TODO age login bud karaye lazem ro anjam bede!
     static enable_disable(email_address) {
         let enOrDis;
-        let employee = User.findObjectByKey("email_address", email_address);
+        let employee = User.findObjectByKey("email", email_address);
         if (employee !== null) {
             if (employee.status === "enable") {
                 enOrDis = "disabled";
@@ -226,7 +225,6 @@ class Admin extends User {
             return enOrDis;
         } else throw "employee with the given email address doesn't exist!"
     }
-
 
 }
 
