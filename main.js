@@ -6,6 +6,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require("jsonwebtoken");
 const Exception = require("./Exception")
 const Admin = require("./model/user");
+const e = require("express");
 const app = express();
 app.use(bodyParser.json());
 
@@ -97,10 +98,20 @@ app.post('/room_management/panel_admin/enable_disable_employee', async (req, res
     }
 })
 
-app.post('/room_management/panel_admin/view_edit_employee', async (req, res) =>{
-    const { name, family_name, department, organization_level, office, working_hours, role, status } = req.body;
+app.post('/room_management/panel_admin/view_employee', async (req, res) =>{
+    const { email } = req.body;
+    try{
+        let detail = Admin.view_detail_one_employee(email)
+        res.status(200).send(detail);
+    }catch (err){
+        res.status(Exception.get_status_by_Emessage(err)).send(err);
+    }
+})
+
+app.post('/room_management/panel_admin/edit_employee', async (req, res) =>{
+    const { name, family_name, email, department, organization_level, office, working_hours, role, status } = req.body;
     try {
-        Admin.change_detail_employee(name, family_name, department, organization_level, office, working_hours, role, status);
+        Admin.change_detail_employee(name, family_name,email, department, organization_level, office, working_hours, role, status);
         res.status(200).send("The user's detail(s) was successfully edited")
     }catch (err){
         res.status(Exception.get_status_by_Emessage(err)).send(err);
@@ -133,11 +144,11 @@ app.post('/room_management/panel_employee/all_employee_department', async (req, 
 })
 
 app.post('/room_management/panel_employee/working_hour',async (req, res) =>{
-    const { email_address } = req.body;
+    const { email } = req.body;
     try {
         let a = "a";
         let employee = new User(a,a,1,a,a,a,a,a,a,a,a);
-        let working_hour = employee.see_working_hour(email_address)
+        let working_hour = employee.see_working_hour(email)
         res.status(200).send(working_hour)
     }catch (err){
         res.status(Exception.get_status_by_Emessage(err)).send(err);

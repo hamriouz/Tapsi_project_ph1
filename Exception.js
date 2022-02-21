@@ -6,25 +6,21 @@ class Exception {
             :
                 return 400;
             case
-            "کارمندی با ایمیل وارد شده وجود دارد!"
-            :
-                return 409;
-            case
-            "Your password should be at least 10 characters including alphabetic and numeric."
-            :
-                return 409;
-            case
-            "Admin has already been created"
-            :
-                return 409;
-            case
             "Employee with the given Email Address doesn't exist!"
             :
                 return 406;
             case
             "there aren't any employees in the given department!"
             :
-                return 409;
+            case
+            "کارمندی با ایمیل وارد شده وجود دارد!"
+            :
+            case
+            "Your password should be at least 10 characters including alphabetic and numeric."
+            :
+            case
+            "Admin has already been created"
+            :
             case
             "employee with the given email address doesn't exist!"
             :

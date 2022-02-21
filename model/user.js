@@ -1,25 +1,25 @@
 const bcrypt = require("bcryptjs");
 const express = require("express");
+const e = require("express");
 
 let all_emails = [];
 let all_users = [];
 let haveAdmin = false;
 
 
-
-class User{
-/*    name;
-    family_name;
-    email;
-    password;
-    phone_number;
-    department;
-    organization_level;
-    office;
-    working_hours;
-    role;
-    status;
-    token;*/
+class User {
+    /*    name;
+        family_name;
+        email;
+        password;
+        phone_number;
+        department;
+        organization_level;
+        office;
+        working_hours;
+        role;
+        status;
+        token;*/
 
     constructor(email, password, phone_number, name, family_name, department, organization_level, office, working_hours, role, status) {
         this.email = email;
@@ -41,7 +41,8 @@ class User{
         let isRepetitive = false;
 
         all_emails.forEach(checkFunction);
-        function checkFunction(given_mail){
+
+        function checkFunction(given_mail) {
             if (email === given_mail) {
                 isRepetitive = true;
             }
@@ -59,14 +60,14 @@ class User{
         return null;
     }
 
-    static signUp(name, family_name, email, password, phone_number, department, organization_level, office, working_hours, role, status){
+    static signUp(name, family_name, email, password, phone_number, department, organization_level, office, working_hours, role, status) {
         if (!(name && family_name && email && password && phone_number && department && organization_level && office && working_hours && role && status))
             throw "please fill all the information"
 
         const repetitiveUser = User.doesEmailExist(email);
 
         //if user already exists:
-        if (repetitiveUser){
+        if (repetitiveUser) {
             throw "کارمندی با ایمیل وارد شده وجود دارد!"
         }
         //check the password
@@ -81,15 +82,17 @@ class User{
     }
 
     //TODO
-    static login(email, password){
+    static login(email, password) {
 
     }
+
     //TODO
-    change_detail(name, family_name, working_hour){
+    change_detail(name, family_name, working_hour) {
 
     }
 
-    get_all_employee(department){
+
+    get_all_employee(department) {
         let all_employees;
         let are_there_any = false;
         for (let i = 0; i < all_users.length; i++) {
@@ -103,15 +106,16 @@ class User{
 
         return all_employees;
     }
-    see_working_hour(email_address){
-       let wanted_employee = User.findObjectByKey("email_address", email_address);
-       if (wanted_employee == null)
-           throw "Employee with the given Email Address doesn't exist!"
-       return wanted_employee.working_hours;
+
+    see_working_hour(email_address) {
+        let wanted_employee = User.findObjectByKey("email_address", email_address);
+        if (wanted_employee == null)
+            throw "Employee with the given Email Address doesn't exist!"
+        return wanted_employee.working_hours;
     }
 }
 
-class Admin extends User{
+class Admin extends User {
     constructor(email, password, phone_number, name, family_name, department, organization_level, office, working_hours, role, status) {
         super(email, password, phone_number, name, family_name, department, organization_level, office, working_hours, role, status);
     }
@@ -139,31 +143,52 @@ class Admin extends User{
     }
 
     //TODO
-    static login(email, password){
+    static login(email, password) {
 
     }
 
-    static create_employee(name, family_name, email, password, phone_number, department, organization_level, office, working_hours, role, status){
+    static create_employee(name, family_name, email, password, phone_number, department, organization_level, office, working_hours, role, status) {
         User.signUp(name, family_name, email, password, phone_number, department, organization_level, office, working_hours, role, status);
 
     }
 
-    static view_list_employees(){
+    static view_list_employees() {
         let all_employee = "";
-        for (let employee in all_users){
-            if (employee.status !== "admin"){
+        for (let employee in all_users) {
+            if (employee.status !== "admin") {
                 all_employee += employee.name + " " + employee.family_name + " : Department = " + employee.department +
                     " Office = " + employee.office + "\n";
             }
         }
         return all_employee;
     }
+
     //TODO
-    static change_detail_employee(){
+    static change_detail_employee(name, family_name, email, department, organization_level, office, working_hours, role, status) {
 
     }
+
+    static view_detail_one_employee(email) {
+        if (!email)
+            throw "please fill all the information"
+        let employee = User.findObjectByKey("email", email);
+        if (employee !== null) {
+            return "Name : " + employee.name + "\n" +
+                "Family name : " + employee.family_name + "\n" +
+                "Email :" + email + "\n" +
+                "Phone number : " + employee.phone_number + "\n" +
+                "Department : " + employee.department + "\n" +
+                "Organization Level : " + employee.organization_level + "\n" +
+                "Office : " + employee.office + "\n" +
+                "Working Hours : " + employee.working_hours + "\n" +
+                "Role : " + employee.role + "\n" +
+                "Active / Not Active : " + employee.status;
+        }
+        else throw "employee with the given email address doesn't exist!"
+    }
+
     //TODO age login bud karaye lazem ro anjam bede!
-    static enable_disable(email_address){
+    static enable_disable(email_address) {
         let enOrDis;
         let employee = User.findObjectByKey("email_address", email_address);
         if (employee !== null) {
@@ -175,8 +200,7 @@ class Admin extends User{
                 employee.status = "enable";
             }
             return enOrDis;
-        }
-        else throw "employee with the given email address doesn't exist!"
+        } else throw "employee with the given email address doesn't exist!"
     }
 
 
@@ -184,7 +208,8 @@ class Admin extends User{
 
 function checkPassword(given_password) {
     const password_regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{10,}$/;
-    return password_regex.test(given_password);}
+    return password_regex.test(given_password);
+}
 
 module.exports = User;
 module.exports = Admin;
