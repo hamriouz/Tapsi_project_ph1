@@ -5,6 +5,7 @@ const e = require("express");
 let all_emails = [];
 let all_users = [];
 let haveAdmin = false;
+let id = 1;
 
 
 class User {
@@ -33,6 +34,8 @@ class User {
         this.working_hours = working_hours;
         this.role = role;
         this.status = status;
+        this.id = id;
+        id++;
         all_emails.push(email);
         all_users.push(this);
     }
@@ -81,7 +84,6 @@ class User {
         const user = new User(email, encryptedPassword, phone_number, name, family_name, department, organization_level, office, working_hours, "admin", "enable");
     }
 
-    //TODO
     static login(email, password) {
 
         if (!(email && password))
@@ -89,16 +91,7 @@ class User {
 
         const user = User.findObjectByKey("email", email);
         if (user && bcrypt.compare(password, user.password)) {
-/*            const token = jwt.sign(
-                {user_id: user._id, email},
-                process.env.TOKEN_KEY,
-                {
-                    expiresIn: "2h",
-                }
-            );
-
-            // save user token
-            user.token = token;*/
+            user.token = createToken(user, email)
         } else
             throw "Invalid Credentials!"
 
@@ -165,23 +158,13 @@ class Admin extends User {
         haveAdmin = true;
     }
 
-    //TODO
     static login(email, password) {
         if (!(email && password))
             throw "please fill all the information"
 
         const user = User.findObjectByKey("email", email);
         if (user && bcrypt.compare(password, user.password)) {
-            /*            const token = jwt.sign(
-                            {user_id: user._id, email},
-                            process.env.TOKEN_KEY,
-                            {
-                                expiresIn: "2h",
-                            }
-                        );
-
-                        // save user token
-                        user.token = token;*/
+            user.token = createToken(user, email)
         } else
             throw "Invalid Credentials!"
     }
@@ -263,6 +246,16 @@ class Admin extends User {
 function checkPassword(given_password) {
     const password_regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{10,}$/;
     return password_regex.test(given_password);
+}
+
+function createToken(user, email){
+    return jwt.sign(
+        {user_id: user.id, email: email},
+        process.env.TOKEN_KEY,
+        {
+            expiresIn: "2h",
+        }
+    );
 }
 
 module.exports = User;

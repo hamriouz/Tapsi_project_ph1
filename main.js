@@ -15,6 +15,8 @@ app.use(bodyParser.json());
 //TODO How to give each user a token and check if the token is given?
 //TODO token set on cookie & token set on header?
 
+//fixme req.body.token miad tokene requeste ersalio migire bad verify mikoni
+
 
 app.post('/room_management/sign_up/admin', async (req, res) => {
     const {name, family_name, email, password, phone_number, department, organization_level, office, working_hours} = req.body;
