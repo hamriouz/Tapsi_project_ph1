@@ -83,7 +83,8 @@ app.post('/room_management/login/employee', async (req, res) =>{
     }
 })
 
-app.post('/room_management/panel_admin/list_of_employees', async (req, res) =>{
+//TODO does it work?
+app.post('/room_management/panel_admin/list_of_employees', async (res) =>{
     let list = Admin.view_list_employees();
     res.status(201).send(list);
 })

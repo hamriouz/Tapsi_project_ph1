@@ -86,9 +86,14 @@ class User {
 
     }
 
-    //TODO
+    //TODO age log in nabashe antune biad!
     change_detail(name, family_name, working_hour) {
-
+        if (name)
+            this.name = name;
+        if (family_name)
+            this.family_name = family_name;
+        if (working_hour)
+            this.working_hours = working_hour;
     }
 
 
