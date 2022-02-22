@@ -10,18 +10,6 @@ let id = 1;
 
 
 class User {
-    /*    name;
-        family_name;
-        email;
-        password;
-        phone_number;
-        department;
-        organization_level;
-        office;
-        working_hours;
-        role;
-        status;
-        token;*/
 
     constructor(email, password, phone_number, name, family_name, department, organization_level, office, working_hours, role, status) {
         this.email = email;
@@ -92,14 +80,17 @@ class User {
 
         const user = User.findObjectByKey("email", email);
         if (user && bcrypt.compare(password, user.password)) {
+            if (user.status === "disable")
+                throw "Your account was disabled! You don't have the permission to log in!"
             user.token = Token.createToken(user, email)
         } else
             throw "Invalid Credentials!"
-
     }
 
     change_detail(user, name, family_name, working_hour) {
         if (user && user.role === "employee") {
+            if (user.status === "disable")
+                throw "Your account was disabled! You don't have the permission to take this action!";
             if (name)
                 this.name = name;
             if (family_name)
@@ -110,9 +101,10 @@ class User {
         else throw "Only a logged in employee can do this action!"
     }
 
-
     get_all_employee(user, department) {
         if (user && user.role === "employee") {
+            if (user.status === "disable")
+                throw "Your account was disabled! You don't have the permission to take this action!"''
             let all_employees;
             let are_there_any = false;
             for (let i = 0; i < all_users.length; i++) {
@@ -131,6 +123,8 @@ class User {
 
     see_working_hour(user, email_address) {
         if (user && user.role === "employee") {
+            if (user.status === "disable")
+                throw "Your account was disabled! You don't have the permission to take this action!";
             let wanted_employee = User.findObjectByKey("email", email_address);
             if (wanted_employee == null)
                 throw "Employee with the given Email Address doesn't exist!"
@@ -244,7 +238,6 @@ class Admin extends User {
         else throw "Only a logged in admin can do this action!"
     }
 
-    //TODO age login bud karaye lazem ro anjam bede!
     static enable_disable(user, email_address) {
         if (user && user.role === "admin") {
             let enOrDis;

@@ -20,6 +20,12 @@ class Exception {
             case
             "Access denied! Please login!"
             :
+            case
+            "Your account was disabled! You don't have the permission to log in!"
+            :
+            case
+            "Your account was disabled! You don't have the permission to take this action!"
+            :
                 return 401;
             case
             "Employee with the given Email Address doesn't exist!"

@@ -12,10 +12,6 @@ const app = express();
 app.use(bodyParser.json());
 
 
-//TODO IF THE USER IS DISABLED THEY CANT LOG IN
-//TODO IF A LOGGED IN USER GETS DISABLED HE CANT TAKE ACTIONS IN THE SYSTEM
-
-
 app.post('/room_management/sign_up/admin', async (req, res) => {
     const {name, family_name, email, password, phone_number, department, organization_level, office, working_hours} = req.body;
     try {
@@ -133,34 +129,6 @@ app.post('/room_management/panel_employee/working_hour',async (req, res) =>{
 })
 
 app.listen(2000)
-
-
-
-/*
-function auth(req, res, next) {
-  const token = req.header('auth-token');
-  if (!token) return res.status(401).json({ error: 'Access Denied' });
-
-  try {
-    const verified = jwt.verify(token, process.env.TOKEN_SECRET);
-    req.user = verified;
-    const user = User.findByPk(parseInt(req.user.id));
-    if (user == null || user == undefined) {
-      req.user = undefined;
-      return res.status(400).json({ error: 'Invalid Token' });
-    }
-    // req.user = verified;
-    next();
-  } catch (err) {
-    res.status(400).json({ error: 'Invalid Token' });
-  }
-}
- */
-
-
-
-
-
 
 
 
