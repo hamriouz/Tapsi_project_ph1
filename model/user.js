@@ -264,3 +264,24 @@ function checkPassword(given_password) {
 
 module.exports = User;
 module.exports = Admin;
+
+
+
+
+
+/*valid input:
+#sign up employee->
+{
+	"name": "hg",
+	"family_name": "sds",
+	"email": "huuuj@s.com",
+	"password": "jjj111iiiiii11",
+	"phone_number": 987665,
+	"department": "jjjj",
+	"organization_level": "as",
+	"office": "jjjjjjjj",
+	"working_hours": "9-10",
+	"role": "employee",
+	"status": "bhjbhjb"
+}
+ */
