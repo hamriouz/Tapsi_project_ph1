@@ -98,36 +98,45 @@ class User {
 
     }
 
-    change_detail(name, family_name, working_hour) {
-        if (name)
-            this.name = name;
-        if (family_name)
-            this.family_name = family_name;
-        if (working_hour)
-            this.working_hours = working_hour;
-    }
-
-
-    get_all_employee(department) {
-        let all_employees;
-        let are_there_any = false;
-        for (let i = 0; i < all_users.length; i++) {
-            if (all_users[i]["department"] === department) {
-                all_employees += all_users[i]["email"] + "\n";
-                are_there_any = true;
-            }
+    change_detail(user, name, family_name, working_hour) {
+        if (user && user.role === "employee") {
+            if (name)
+                this.name = name;
+            if (family_name)
+                this.family_name = family_name;
+            if (working_hour)
+                this.working_hours = working_hour;
         }
-        if (!are_there_any)
-            throw "there aren't any employees in the given department!"
-
-        return all_employees;
+        else throw "Only a logged in employee can do this action!"
     }
 
-    see_working_hour(email_address) {
-        let wanted_employee = User.findObjectByKey("email", email_address);
-        if (wanted_employee == null)
-            throw "Employee with the given Email Address doesn't exist!"
-        return wanted_employee.working_hours;
+
+    get_all_employee(user, department) {
+        if (user && user.role === "employee") {
+            let all_employees;
+            let are_there_any = false;
+            for (let i = 0; i < all_users.length; i++) {
+                if (all_users[i]["department"] === department) {
+                    all_employees += all_users[i]["email"] + "\n";
+                    are_there_any = true;
+                }
+            }
+            if (!are_there_any)
+                throw "there aren't any employees in the given department!"
+
+            return all_employees;
+        }
+        else throw "Only a logged in employee can do this action!"
+    }
+
+    see_working_hour(user, email_address) {
+        if (user && user.role === "employee") {
+            let wanted_employee = User.findObjectByKey("email", email_address);
+            if (wanted_employee == null)
+                throw "Employee with the given Email Address doesn't exist!"
+            return wanted_employee.working_hours;
+        }
+        else throw "Only a logged in employee can do this action!"
     }
 }
 
@@ -170,13 +179,13 @@ class Admin extends User {
     }
 
     static create_employee(user, name, family_name, email, password, phone_number, department, organization_level, office, working_hours, role, status) {
-        if (user && user.status === "admin")
+        if (user && user.role === "admin")
         User.signUp(name, family_name, email, password, phone_number, department, organization_level, office, working_hours, role, status);
         else throw "Only a logged in admin can create an employee!"
     }
 
     static view_list_employees(user) {
-        if (user && user.status === "admin") {
+        if (user && user.role === "admin") {
             let all_employee = "";
             for (let employee in all_users) {
                 if (employee.status !== "admin") {
@@ -190,7 +199,7 @@ class Admin extends User {
     }
 
     static change_detail_employee(user, name, family_name, email, department, organization_level, office, working_hours, role, status) {
-        if (user && user. status === "admin") {
+        if (user && user. role === "admin") {
             let employee = User.findObjectByKey("email", email);
             if (employee !== null) {
                 if (name)
@@ -215,7 +224,7 @@ class Admin extends User {
     }
 
     static view_detail_one_employee(user, email) {
-        if (user && user.status === "admin") {
+        if (user && user.role === "admin") {
             if (!email)
                 throw "please fill all the information"
             let employee = User.findObjectByKey("email", email);
@@ -237,7 +246,7 @@ class Admin extends User {
 
     //TODO age login bud karaye lazem ro anjam bede!
     static enable_disable(user, email_address) {
-        if (user && user.status === "admin") {
+        if (user && user.role === "admin") {
             let enOrDis;
             let employee = User.findObjectByKey("email", email_address);
             if (employee !== null) {
