@@ -7,6 +7,9 @@ class Exception {
             case
             "Only a logged in admin can create an employee!"
             :
+            case
+            "Only a logged in admin can do this action!"
+            :
                 return 400;
             case
             "Invalid Credentials!"

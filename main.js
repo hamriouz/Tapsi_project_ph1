@@ -12,6 +12,8 @@ const app = express();
 app.use(bodyParser.json());
 
 
+//TODO CHECK IF THE PERSON USING THE EMPLOYEE'S ACTION IS AN EMPLOYEE!
+//TODO tuyen enable disable check kone ke yaru log ine ya na o ....
 //TODO in logins and other actions, check if the person who is logging in is the correct person (admin or employee)
 //TODO How to give each user a token and check if the token is given?
 //fixme req.body.token miad tokene requeste ersalio migire bad verify mikoni
@@ -21,6 +23,8 @@ app.use(bodyParser.json());
 
 // send the token when logging in -> res.header('Authorization', Token.createToken(User.findObjectByKey("email", email), email));
 // receive the token when logged in -> const user_request = Token.authenticate_actor(req.header('Authorization'));
+
+// If no one had logged in, it throws an exception and no need yto handle it again!
 
 app.post('/room_management/sign_up/admin', async (req, res) => {
     const {name, family_name, email, password, phone_number, department, organization_level, office, working_hours} = req.body;
@@ -32,7 +36,6 @@ app.post('/room_management/sign_up/admin', async (req, res) => {
     }
 })
 
-//TODO CHECK IF THE SENT USER IS THE ADMIN! OTHERWISE THROW EXCEPTION!
 app.post('/room_management/sign_up/employee', async (req, res) =>{
     const {name, family_name, email, password, phone_number, department, organization_level, office, working_hours, role, status} = req.body;
     try {
@@ -66,12 +69,10 @@ app.post('/room_management/login/employee', async (req, res) =>{
     }
 })
 
-//TODO CHECK IF THE SENT USER IS THE ADMIN! OTHERWISE THROW EXCEPTION!
 app.post('/room_management/panel_admin/list_of_employees', async (req, res) =>{
     try {
         const user_request = Token.authenticate_actor(req.header('Authorization'));
-        let list = Admin.view_list_employees(user_request);
-        res.status(201).send(list);
+        res.status(201).send(Admin.view_list_employees(user_request));
     }catch (err){
         res.status(Exception.get_status_by_Emessage(err)).send(err);
     }
@@ -113,11 +114,7 @@ app.post('/room_management/panel_admin/edit_employee', async (req, res) =>{
 app.post('/room_management/panel_employee/edit', async (req, res) =>{
     const { name, family_name, working_hour } = req.body;
     try {
-        const token = req.header('Authorization');
-        const user = valiate(token);
-
-        let a = "a";
-        let employee = new User(a,a,1,a,a,a,a,a,a,a,a);
+        const employee = Token.authenticate_actor(req.header('Authorization'));
         employee.change_detail(name, family_name, working_hour);
         res.status(200).send("The employee's detail(s) was changed successfully!")
     }catch (err){
@@ -128,10 +125,8 @@ app.post('/room_management/panel_employee/edit', async (req, res) =>{
 app.post('/room_management/panel_employee/all_employee_department', async (req, res) =>{
     const { department } = req.body;
     try {
-        let a = "a";
-        let employee = new User(a,a,1,a,a,a,a,a,a,a,a);
-        let list = employee.get_all_employee(department)
-        res.status(200).send(list)
+        let employee = Token.authenticate_actor(req.header('Authorization'));
+        res.status(200).send(employee.get_all_employee(department))
     }catch (err){
         res.status(Exception.get_status_by_Emessage(err)).send(err);
     }
@@ -140,10 +135,8 @@ app.post('/room_management/panel_employee/all_employee_department', async (req, 
 app.post('/room_management/panel_employee/working_hour',async (req, res) =>{
     const { email } = req.body;
     try {
-        let a = "a";
-        let employee = new User(a,a,1,a,a,a,a,a,a,a,a);
-        let working_hour = employee.see_working_hour(email)
-        res.status(200).send(working_hour)
+        let employee = Token.authenticate_actor(req.header('Authorization'));
+        res.status(200).send(employee.see_working_hour(email))
     }catch (err){
         res.status(Exception.get_status_by_Emessage(err)).send(err);
     }

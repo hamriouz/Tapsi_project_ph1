@@ -1,6 +1,7 @@
 const bcrypt = require("bcryptjs");
 const express = require("express");
 const e = require("express");
+const Token = require("../Token");
 
 let all_emails = [];
 let all_users = [];
@@ -62,19 +63,6 @@ class User {
         }
         return null;
     }
-    static createToken(user, email){
-        return jwt.sign(
-            {user_id: user._id, email: email},
-            process.env.TOKEN_KEY,
-            {
-                expiresIn: "1h",
-            }
-        );
-    }
-
-    static get_user_by_token(ja, jjj, jjkj){
-
-    }
 
     static signUp(name, family_name, email, password, phone_number, department, organization_level, office, working_hours, role, status) {
         if (!(name && family_name && email && password && phone_number && department && organization_level && office && working_hours && role && status))
@@ -104,13 +92,12 @@ class User {
 
         const user = User.findObjectByKey("email", email);
         if (user && bcrypt.compare(password, user.password)) {
-            user.token = createToken(user, email)
+            user.token = Token.createToken(user, email)
         } else
             throw "Invalid Credentials!"
 
     }
 
-    //TODO age log in nabashe antune biad!
     change_detail(name, family_name, working_hour) {
         if (name)
             this.name = name;
@@ -189,70 +176,82 @@ class Admin extends User {
     }
 
     static view_list_employees(user) {
-        let all_employee = "";
-        for (let employee in all_users) {
-            if (employee.status !== "admin") {
-                all_employee += employee.name + " " + employee.family_name + " : Department = " + employee.department +
-                    " Office = " + employee.office + "\n";
+        if (user && user.status === "admin") {
+            let all_employee = "";
+            for (let employee in all_users) {
+                if (employee.status !== "admin") {
+                    all_employee += employee.name + " " + employee.family_name + " : Department = " + employee.department +
+                        " Office = " + employee.office + "\n";
+                }
             }
+            return all_employee;
         }
-        return all_employee;
+        else throw "Only a logged in admin can do this action!"
     }
 
     static change_detail_employee(user, name, family_name, email, department, organization_level, office, working_hours, role, status) {
-        let employee = User.findObjectByKey("email", email);
-        if (employee !== null) {
-            if (name)
-                employee.name = name;
-            if (family_name)
-                employee.family_name = family_name;
-            if (department)
-                employee.department = department;
-            if (organization_level)
-                employee.organization_level = organization_level;
-            if (office)
-                employee.office = office;
-            if (working_hours)
-                employee.working_hours = working_hours;
-            if (role)
-                employee.role = role;
-            if (status)
-                employee.status = status;
-        } else throw "Employee with the given Email Address doesn't exist!";
+        if (user && user. status === "admin") {
+            let employee = User.findObjectByKey("email", email);
+            if (employee !== null) {
+                if (name)
+                    employee.name = name;
+                if (family_name)
+                    employee.family_name = family_name;
+                if (department)
+                    employee.department = department;
+                if (organization_level)
+                    employee.organization_level = organization_level;
+                if (office)
+                    employee.office = office;
+                if (working_hours)
+                    employee.working_hours = working_hours;
+                if (role)
+                    employee.role = role;
+                if (status)
+                    employee.status = status;
+            } else throw "Employee with the given Email Address doesn't exist!";
+        }
+        else throw "Only a logged in admin can do this action!"
     }
 
     static view_detail_one_employee(user, email) {
-        if (!email)
-            throw "please fill all the information"
-        let employee = User.findObjectByKey("email", email);
-        if (employee !== null) {
-            return "Name : " + employee.name + "\n" +
-                "Family name : " + employee.family_name + "\n" +
-                "Email :" + email + "\n" +
-                "Phone number : " + employee.phone_number + "\n" +
-                "Department : " + employee.department + "\n" +
-                "Organization Level : " + employee.organization_level + "\n" +
-                "Office : " + employee.office + "\n" +
-                "Working Hours : " + employee.working_hours + "\n" +
-                "Role : " + employee.role + "\n" +
-                "Active / Not Active : " + employee.status;
-        } else throw "employee with the given email address doesn't exist!"
+        if (user && user.status === "admin") {
+            if (!email)
+                throw "please fill all the information"
+            let employee = User.findObjectByKey("email", email);
+            if (employee !== null) {
+                return "Name : " + employee.name + "\n" +
+                    "Family name : " + employee.family_name + "\n" +
+                    "Email :" + email + "\n" +
+                    "Phone number : " + employee.phone_number + "\n" +
+                    "Department : " + employee.department + "\n" +
+                    "Organization Level : " + employee.organization_level + "\n" +
+                    "Office : " + employee.office + "\n" +
+                    "Working Hours : " + employee.working_hours + "\n" +
+                    "Role : " + employee.role + "\n" +
+                    "Active / Not Active : " + employee.status;
+            } else throw "employee with the given email address doesn't exist!"
+        }
+        else throw "Only a logged in admin can do this action!"
     }
 
     //TODO age login bud karaye lazem ro anjam bede!
     static enable_disable(user, email_address) {
-        let enOrDis;
-        let employee = User.findObjectByKey("email", email_address);
-        if (employee !== null) {
-            if (employee.status === "enable") {
-                enOrDis = "disabled";
-                employee.status = "disable"
-            } else {
-                enOrDis = "enabled";
-                employee.status = "enable";
-            }
-            return enOrDis;
-        } else throw "employee with the given email address doesn't exist!"
+        if (user && user.status === "admin") {
+            let enOrDis;
+            let employee = User.findObjectByKey("email", email_address);
+            if (employee !== null) {
+                if (employee.status === "enable") {
+                    enOrDis = "disabled";
+                    employee.status = "disable"
+                } else {
+                    enOrDis = "enabled";
+                    employee.status = "enable";
+                }
+                return enOrDis;
+            } else throw "employee with the given email address doesn't exist!"
+        }
+        else throw "Only a logged in admin can do this action!"
     }
 
 }
