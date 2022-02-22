@@ -34,7 +34,7 @@ class User {
         this.working_hours = working_hours;
         this.role = role;
         this.status = status;
-        this.id = id;
+        this._id = id;
         id++;
         all_emails.push(email);
         all_users.push(this);
@@ -61,6 +61,19 @@ class User {
             }
         }
         return null;
+    }
+    static createToken(user, email){
+        return jwt.sign(
+            {user_id: user._id, email: email},
+            process.env.TOKEN_KEY,
+            {
+                expiresIn: "1h",
+            }
+        );
+    }
+
+    static get_user_by_token(ja, jjj, jjkj){
+
     }
 
     static signUp(name, family_name, email, password, phone_number, department, organization_level, office, working_hours, role, status) {
@@ -169,12 +182,13 @@ class Admin extends User {
             throw "Invalid Credentials!"
     }
 
-    static create_employee(name, family_name, email, password, phone_number, department, organization_level, office, working_hours, role, status) {
+    static create_employee(user, name, family_name, email, password, phone_number, department, organization_level, office, working_hours, role, status) {
+        if (user && user.status === "admin")
         User.signUp(name, family_name, email, password, phone_number, department, organization_level, office, working_hours, role, status);
-
+        else throw "Only a logged in admin can create an employee!"
     }
 
-    static view_list_employees() {
+    static view_list_employees(user) {
         let all_employee = "";
         for (let employee in all_users) {
             if (employee.status !== "admin") {
@@ -185,7 +199,7 @@ class Admin extends User {
         return all_employee;
     }
 
-    static change_detail_employee(name, family_name, email, department, organization_level, office, working_hours, role, status) {
+    static change_detail_employee(user, name, family_name, email, department, organization_level, office, working_hours, role, status) {
         let employee = User.findObjectByKey("email", email);
         if (employee !== null) {
             if (name)
@@ -207,7 +221,7 @@ class Admin extends User {
         } else throw "Employee with the given Email Address doesn't exist!";
     }
 
-    static view_detail_one_employee(email) {
+    static view_detail_one_employee(user, email) {
         if (!email)
             throw "please fill all the information"
         let employee = User.findObjectByKey("email", email);
@@ -226,7 +240,7 @@ class Admin extends User {
     }
 
     //TODO age login bud karaye lazem ro anjam bede!
-    static enable_disable(email_address) {
+    static enable_disable(user, email_address) {
         let enOrDis;
         let employee = User.findObjectByKey("email", email_address);
         if (employee !== null) {
@@ -248,15 +262,6 @@ function checkPassword(given_password) {
     return password_regex.test(given_password);
 }
 
-function createToken(user, email){
-    return jwt.sign(
-        {user_id: user.id, email: email},
-        process.env.TOKEN_KEY,
-        {
-            expiresIn: "2h",
-        }
-    );
-}
 
 module.exports = User;
 module.exports = Admin;

@@ -4,9 +4,17 @@ class Exception {
             case
             "please fill all the information"
             :
-            case "Invalid Credentials!"
+            case
+            "Only a logged in admin can create an employee!"
             :
                 return 400;
+            case
+            "Invalid Credentials!"
+            :
+            case
+            "Access denied! Please login!"
+            :
+                return 401;
             case
             "Employee with the given Email Address doesn't exist!"
             :
