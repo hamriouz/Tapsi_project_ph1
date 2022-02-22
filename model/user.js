@@ -1,6 +1,4 @@
 const bcrypt = require("bcryptjs");
-const express = require("express");
-const e = require("express");
 const Token = require("../Token");
 
 let all_emails = [];
@@ -105,7 +103,7 @@ class User {
         if (user && user.role === "employee") {
             if (user.status === "disable")
                 throw "Your account was disabled! You don't have the permission to take this action!"''
-            let all_employees;
+            let all_employees = "";
             let are_there_any = false;
             for (let i = 0; i < all_users.length; i++) {
                 if (all_users[i]["department"] === department) {
