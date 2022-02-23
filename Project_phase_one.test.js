@@ -13,13 +13,16 @@ test('should throw an error if some of the fields dont have information', () => 
         Admin.signUp("name", "", "name@gmail.com", "kkkkkkkkkkkkkkkkkkkkkkk555555555555555555", 989123456789, "CX", "kkkkkkkkkkkkkkkkkkkk", "aaaaa", "9-18");
     }).toThrow("please fill all the information");
 })
-
 test('should throw an error if the given password was weak', () => {
     expect(() => {
         Admin.signUp("name", "family", "name@gmail.com", "k", 989123456789, "CX", "kkkkkkkkkkkkkkkkkkkk", "aaaaa", "9-18");
     }).toThrow("Your password should be at least 10 characters including alphabetic and numeric.");
 })
+test("create an admin without throwing exceptions", () => {
+    Admin.signUp("name", "family", "name@gmail.com", "kkkkkkkkkk121212", 989123456789, "CX", "kkkkkkkkkkkkkkkkkkkk", "aaaaa", "9-18");
 
+    expect(User.findObjectByKey("email", "name@gmail.com")).not.toBeNull();
+})
 test('should throw an error if an admin has already been created', () => {
     Admin.signUp("name", "family", "name@gmail.com", "kkkkkkkkkk121212", 989123456789, "CX", "kkkkkkkkkkkkkkkkkkkk", "aaaaa", "9-18");
 
@@ -28,26 +31,21 @@ test('should throw an error if an admin has already been created', () => {
     }).toThrow("Admin has already been created");
 })
 
-test("create an admin without throwing exceptions", () => {
-    Admin.signUp("name", "family", "name@gmail.com", "kkkkkkkkkk121212", 989123456789, "CX", "kkkkkkkkkkkkkkkkkkkk", "aaaaa", "9-18");
 
-    expect(User.findObjectByKey("email", "name@gmail.com")).not.toBeNull();
-})
+//Testing the signup user!
+test()
 
 
 //Testing the check password function
 test("Return false because the password doesn't contain number", () => {
     expect(checkPassword("mnmnmmmnmmm")).toBe(false);
 });
-
 test("Return false because the password doesn't contain letter", () => {
     expect(checkPassword("1234567890")).toBe(false);
 });
-
 test("Return false because the password doesn't contain 10 characters", () => {
     expect(checkPassword("mjk123")).toBe(false);
 });
-
 test("Return true", () => {
     expect(checkPassword("mnbv12lkjh")).toBe(true);
 });
@@ -57,7 +55,6 @@ test("Return true", () => {
 test('when exception "please fill all the information" is thrown status should be 400', () => {
     expect(Exception.get_status_by_Emessage("please fill all the information")).toBe(400);
 });
-
 test('when exception "Only a logged in admin can create an employee!" is thrown status should be 400', () => {
     expect(Exception.get_status_by_Emessage("Only a logged in admin can create an employee!")).toBe(400);
 });

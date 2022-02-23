@@ -176,13 +176,13 @@ class Admin extends User {
             throw "Invalid Credentials!"
     }
 
-    static create_employee(user, name, family_name, email, password, phone_number, department, organization_level, office, working_hours, role, status) {
+    create_employee(user, name, family_name, email, password, phone_number, department, organization_level, office, working_hours, role, status) {
         if (user && user.role === "admin")
         User.signUp(name, family_name, email, password, phone_number, department, organization_level, office, working_hours, role, status);
         else throw "Only a logged in admin can create an employee!"
     }
 
-    static view_list_employees(user) {
+    view_list_employees(user) {
         if (user && user.role === "admin") {
             let all_employee = "";
             for (let employee in all_users) {
@@ -196,7 +196,7 @@ class Admin extends User {
         else throw "Only a logged in admin can do this action!"
     }
 
-    static change_detail_employee(user, name, family_name, email, department, organization_level, office, working_hours, role, status) {
+    change_detail_employee(user, name, family_name, email, department, organization_level, office, working_hours, role, status) {
         if (user && user. role === "admin") {
             let employee = User.findObjectByKey("email", email);
             if (employee !== null) {
@@ -221,7 +221,7 @@ class Admin extends User {
         else throw "Only a logged in admin can do this action!"
     }
 
-    static view_detail_one_employee(user, email) {
+    view_detail_one_employee(user, email) {
         if (user && user.role === "admin") {
             if (!email)
                 throw "please fill all the information"
@@ -242,7 +242,7 @@ class Admin extends User {
         else throw "Only a logged in admin can do this action!"
     }
 
-    static enable_disable(user, email_address) {
+    enable_disable(user, email_address) {
         if (user && user.role === "admin") {
             let enOrDis;
             let employee = User.findObjectByKey("email", email_address);
@@ -267,7 +267,17 @@ function checkPassword(given_password) {
     return password_regex.test(given_password);
 }
 
-module.exports = {checkPassword, User,Admin};
+function findObjectByKey(key, value) {
+    for (let i = 0; i < all_users.length; i++) {
+        if (all_users[i][key] === value) {
+            return all_users[i];
+        }
+    }
+    return null;
+}
+
+
+module.exports = {checkPassword, User, Admin, findObjectByKey};
 
 
 
