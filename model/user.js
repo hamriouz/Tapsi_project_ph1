@@ -41,6 +41,12 @@ class User {
         return isRepetitive;
     }
 
+/*    static checkPassword(given_password) {
+        const password_regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{10,}$/;
+        return password_regex.test(given_password);
+    }*/
+
+
     static findObjectByKey(key, value) {
         for (let i = 0; i < all_users.length; i++) {
             if (all_users[i][key] === value) {
@@ -261,9 +267,7 @@ function checkPassword(given_password) {
     return password_regex.test(given_password);
 }
 
-
-module.exports = User;
-module.exports = Admin;
+module.exports = {checkPassword, User,Admin};
 
 
 

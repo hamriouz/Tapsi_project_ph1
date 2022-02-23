@@ -1,10 +1,33 @@
 const superset = require('supertest')
-const User = require("./model/user");
 const Exception = require("./Exception")
-const Admin = require("./model/user");
+const {User} = require("./model/user");
+const {Admin} = require("./model/user");
+const {checkPassword} = require("./model/user");
 const Token = require("./Token");
 
 
+
+
+
+//Testing the check password function
+test("Return false because the password doesn't contain number", () => {
+    expect(checkPassword("mnmnmmmnmmm")).toBe(false);
+});
+
+test("Return false because the password doesn't contain letter", () => {
+    expect(checkPassword("1234567890")).toBe(false);
+});
+
+test("Return false because the password doesn't contain 10 characters", () => {
+    expect(checkPassword("mjk123")).toBe(false);
+});
+
+test("Return true", () => {
+    expect(checkPassword("mnbv12lkjh")).toBe(true);
+});
+
+
+//Testing the return values of the Exception class
 test('when exception "please fill all the information" is thrown status should be 400', () => {
     expect(Exception.get_status_by_Emessage("please fill all the information")).toBe(400);
 });
