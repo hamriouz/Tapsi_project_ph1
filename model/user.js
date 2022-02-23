@@ -146,7 +146,7 @@ class Admin extends User {
     static signUp(name, family_name, email, password, phone_number, department, organization_level, office, working_hours) {
 
         if (!(name && family_name && email && password && phone_number && department && organization_level && office && working_hours))
-            throw "please fill all the information";
+            throw new Error("please fill all the information");
 
         //if admin was already created:
         if (haveAdmin) {

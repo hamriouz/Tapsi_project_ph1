@@ -7,6 +7,32 @@ const Token = require("./Token");
 
 
 
+//Testing the signup admin!
+test('should throw an error if some of the fields dont have information', () => {
+    expect(() => {
+        Admin.signUp("name", "", "name@gmail.com", "kkkkkkkkkkkkkkkkkkkkkkk555555555555555555", 989123456789, "CX", "kkkkkkkkkkkkkkkkkkkk", "aaaaa", "9-18");
+    }).toThrow("please fill all the information");
+})
+
+test('should throw an error if the given password was weak', () => {
+    expect(() => {
+        Admin.signUp("name", "family", "name@gmail.com", "k", 989123456789, "CX", "kkkkkkkkkkkkkkkkkkkk", "aaaaa", "9-18");
+    }).toThrow("Your password should be at least 10 characters including alphabetic and numeric.");
+})
+
+test('should throw an error if an admin has already been created', () => {
+    Admin.signUp("name", "family", "name@gmail.com", "kkkkkkkkkk121212", 989123456789, "CX", "kkkkkkkkkkkkkkkkkkkk", "aaaaa", "9-18");
+
+    expect(() => {
+        Admin.signUp("name", "family", "nammmmme@gmail.com", "kllllllllll1212", 989123456789, "CX", "kkkkkkkkkkkkkkkkkkkk", "aaaaa", "9-18");
+    }).toThrow("Admin has already been created");
+})
+
+test("create an admin without throwing exceptions", () => {
+    Admin.signUp("name", "family", "name@gmail.com", "kkkkkkkkkk121212", 989123456789, "CX", "kkkkkkkkkkkkkkkkkkkk", "aaaaa", "9-18");
+
+    expect(User.findObjectByKey("email", "name@gmail.com")).not.toBeNull();
+})
 
 
 //Testing the check password function
