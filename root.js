@@ -5,7 +5,6 @@ const Exception = require("./Exception")
 const Admin = require("./model/Admin");
 const Token = require("./Token");
 const actionTakerValidation = require("./validation/actionTakerValidation");
-const e = require("express");
 
 const app = express();
 app.use(bodyParser.json());
@@ -13,7 +12,7 @@ app.use(bodyParser.json());
 
 
 // each file should contain one class
-// TODO debug the separation of Admin and User
+// debug the separation of Admin and User
 // validations can be moved to presentation (view) layer
 // TODO change the response to json format
 // TODO Change the method name so it'll reflect the responsibility (signup is actually create employee and createAdmin)
@@ -25,32 +24,33 @@ app.use(bodyParser.json());
 
 
 //TODO INCOMPLETE!
-app.post('/room_management/sign_up/admin', async (req, res) => {
-    const {name, family_name, email, password, phone_number, department, organization_level, office, working_hours} = req.body;
-    if (!(name && family_name && email && password && phone_number && department && organization_level && office && working_hours))
+app.post('/roomManagement/signUp/admin', async (req, res) => {
+    const {name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour} = req.body;
+    if (!(name && familyName && email && password && phoneNumber && department && organizationLevel && office && workingHour))
         throw new Error("please fill all the information");
+
     try {
-        Admin.signUp(name, family_name, email, password, phone_number, department, organization_level, office, working_hours);
+        Admin.signUp(name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour);
         res.status(201).send("Admin was successfully created!");
     }catch (err){
-        res.status(Exception.get_status_by_Emessage(err)).send(err);
+        res.status(Exception.getStatusByExceptionMessage(err)).send(err);
     }
 })
 //TODO INCOMPLETE!
-app.post('/room_management/sign_up/employee', async (req, res) =>{
-    const {name, family_name, email, password, phone_number, department, organization_level, office, working_hours, role, status} = req.body;
-    if (!(name && family_name && email && password && phone_number && department && organization_level && office && working_hours && role && status))
+app.post('/roomManagement/signUp/employee', async (req, res) =>{
+    const {name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour, role, status} = req.body;
+    if (!(name && familyName && email && password && phoneNumber && department && organizationLevel && office && workingHour && role && status))
         throw new Error("please fill all the information");
     try {
-        const user_request = Token.authenticate_actor(req.header('Authorization'));
-        user_request.create_employee(user_request, name, family_name, email, password, phone_number, department, organization_level, office, working_hours, role, status);
+        const userRequest = Token.authenticateActor(req.header('Authorization'));
+        userRequest.createEmployee(userRequest, name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour, role, status);
         res.status(201).send("Username with email address \"" + email + "\" was successfully created!");
     }catch (err){
-        res.status(Exception.get_status_by_Emessage(err)).send(err);
+        res.status(Exception.getStatusByExceptionMessage(err)).send(err);
     }
 })
 //TODO INCOMPLETE!
-app.post('/room_management/login/admin', async (req, res) => {
+app.post('/roomManagement/login/admin', async (req, res) => {
     const {email, password} = req.body;
     if (!(email && password))
         throw new Error("please fill all the information");
@@ -59,11 +59,11 @@ app.post('/room_management/login/admin', async (req, res) => {
         res.header('Authorization', Token.createToken(User.findObjectByKey("email", email), email));
         res.status(200).send("The admin successfully logged in!");
     } catch (err) {
-        res.status(Exception.get_status_by_Emessage(err)).send(err);
+        res.status(Exception.getStatusByExceptionMessage(err)).send(err);
     }
 })
 //TODO INCOMPLETE!
-app.post('/room_management/login/employee', async (req, res) =>{
+app.post('/roomManagement/login/employee', async (req, res) =>{
     const { email, password } = req.body;
     if (!(email && password))
         throw new Error("please fill all the information");
@@ -72,93 +72,93 @@ app.post('/room_management/login/employee', async (req, res) =>{
         res.header('Authorization', Token.createToken(User.findObjectByKey("email", email), email));
         res.status(200).send("The admin successfully logged in!");
     }catch (err){
-        res.status(Exception.get_status_by_Emessage(err)).send(err);
+        res.status(Exception.getStatusByExceptionMessage(err)).send(err);
     }
 })
 
-app.post('/room_management/panel_admin/list_of_employees', async (req, res) =>{
+app.post('/roomManagement/panelAdmin/listOfEmployees', async (req, res) =>{
     try {
-        const user_request = Token.authenticate_actor(req.header('Authorization'));
-        actionTakerValidation.validateAdmin(user_request);
-        res.status(201).send(user_request.view_list_employees());
+        const userRequest = Token.authenticateActor(req.header('Authorization'));
+        actionTakerValidation.validateAdmin(userRequest);
+        res.status(201).send(userRequest.view_list_employees());
     }catch (err){
-        res.status(Exception.get_status_by_Emessage(err)).send(err);
+        res.status(Exception.getStatusByExceptionMessage(err)).send(err);
     }
 })
 
-app.post('/room_management/panel_admin/enable_disable_employee', async (req, res) =>{
+app.post('/roomManagement/panelAdmin/enableDisableEmployee', async (req, res) =>{
     const {email} = req.body;
     if (!email)
         throw "please fill all the information"
     try {
-        const user_request = Token.authenticate_actor(req.header('Authorization'));
-        actionTakerValidation.validateAdmin(user_request);
-        let EnOrDis = user_request.enable_disable(email);
+        const userRequest = Token.authenticateActor(req.header('Authorization'));
+        actionTakerValidation.validateAdmin(userRequest);
+        let EnOrDis = userRequest.enable_disable(email);
         res.status(200).send("employee with the email address " + email + " was successfully " + EnOrDis);
     }catch (err){
-        res.status(Exception.get_status_by_Emessage(err)).send(err);
+        res.status(Exception.getStatusByExceptionMessage(err)).send(err);
     }
 })
 
-app.post('/room_management/panel_admin/view_employee', async (req, res) =>{
+app.post('/roomManagement/panelAdmin/viewEmployee', async (req, res) =>{
     const { email } = req.body;
     if (!email) throw "please fill all the information"
     try{
-        const user_request = Token.authenticate_actor(req.header('Authorization'));
-        actionTakerValidation.validateAdmin(user_request);
-        let detail = user_request.view_detail_one_employee(email)
+        const userRequest = Token.authenticateActor(req.header('Authorization'));
+        actionTakerValidation.validateAdmin(userRequest);
+        let detail = userRequest.view_detail_one_employee(email)
         res.status(200).send(detail);
     }catch (err){
-        res.status(Exception.get_status_by_Emessage(err)).send(err);
+        res.status(Exception.getStatusByExceptionMessage(err)).send(err);
     }
 })
 
-app.post('/room_management/panel_admin/edit_employee', async (req, res) =>{
-    const { name, family_name, email, department, organization_level, office, working_hours, role, status } = req.body;
+app.post('/roomManagement/panelAdmin/editEmployee', async (req, res) =>{
+    const { name, familyName, email, department, organizationLevel, office, workingHour, role, status } = req.body;
     try {
-        const user_request = Token.authenticate_actor(req.header('Authorization'));
-        actionTakerValidation.validateAdmin(user_request);
-        user_request.change_detail_employee(name, family_name,email, department, organization_level, office, working_hours, role, status);
+        const userRequest = Token.authenticateActor(req.header('Authorization'));
+        actionTakerValidation.validateAdmin(userRequest);
+        userRequest.change_detail_employee(name, familyName,email, department, organizationLevel, office, workingHour, role, status);
         res.status(200).send("The user's detail(s) was successfully edited")
     }catch (err){
-        res.status(Exception.get_status_by_Emessage(err)).send(err);
+        res.status(Exception.getStatusByExceptionMessage(err)).send(err);
     }
 })
 
-app.post('/room_management/panel_employee/edit', async (req, res) =>{
-    const { name, family_name, working_hour } = req.body;
+app.post('/roomManagement/panelEmployee/edit', async (req, res) =>{
+    const { name, familyName, workingHour } = req.body;
     try {
-        const employee = Token.authenticate_actor(req.header('Authorization'));
+        const employee = Token.authenticateActor(req.header('Authorization'));
         actionTakerValidation.validateEmployee(employee);
-        employee.change_detail(employee, name, family_name, working_hour);
+        employee.change_detail(employee, name, familyName, workingHour);
         res.status(200).send("The employee's detail(s) was changed successfully!")
     }catch (err){
-        res.status(Exception.get_status_by_Emessage(err)).send(err);
+        res.status(Exception.getStatusByExceptionMessage(err)).send(err);
     }
 })
 
-app.post('/room_management/panel_employee/all_employee_department', async (req, res) =>{
+app.post('/roomManagement/panelEmployee/allEmployeeDepartment', async (req, res) =>{
     const { department } = req.body;
     if (!department)
         throw "please fill all the information";
     try {
-        let employee = Token.authenticate_actor(req.header('Authorization'));
+        let employee = Token.authenticateActor(req.header('Authorization'));
         actionTakerValidation.validateEmployee(employee);
         res.status(200).send(employee.get_all_employee(department))
     }catch (err){
-        res.status(Exception.get_status_by_Emessage(err)).send(err);
+        res.status(Exception.getStatusByExceptionMessage(err)).send(err);
     }
 })
 
-app.post('/room_management/panel_employee/working_hour',async (req, res) =>{
+app.post('/roomManagement/panelEmployee/workingHour',async (req, res) =>{
     const { email } = req.body;
     if (!email) throw "please fill all the information"
     try {
-        let employee = Token.authenticate_actor(req.header('Authorization'));
+        let employee = Token.authenticateActor(req.header('Authorization'));
         actionTakerValidation.validateEmployee(employee)
         res.status(200).send(employee.see_working_hour(employee, email))
     }catch (err){
-        res.status(Exception.get_status_by_Emessage(err)).send(err);
+        res.status(Exception.getStatusByExceptionMessage(err)).send(err);
     }
 })
 

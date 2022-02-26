@@ -7,15 +7,15 @@ let haveAdmin = false;
 
 
 class Admin extends User {
-    constructor(email, password, phone_number, name, family_name, department, organization_level, office, working_hours, role, status) {
-        super(email, password, phone_number, name, family_name, department, organization_level, office, working_hours, role, status);
+    constructor(email, password) {
+        super(email, password);
     }
 
-    static signUp(name, family_name, email, password, phone_number, department, organization_level, office, working_hours) {
+/*    constructor(email, password, phone_number, name, family_name, department, organization_level, office, working_hours, role, status) {
+        super(email, password, phone_number, name, family_name, department, organization_level, office, working_hours, role, status);
+    }*/
 
-        if (!(name && family_name && email && password && phone_number && department && organization_level && office && working_hours))
-            throw new Error("please fill all the information");
-
+    static signUp(name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour) {
         //if admin was already created:
         if (haveAdmin) {
             throw "Admin has already been created";
@@ -29,14 +29,11 @@ class Admin extends User {
         let encryptedPassword = bcrypt.hash(password, 10);
 
         //create new admin
-        const user = new User(email, encryptedPassword, phone_number, name, family_name, department, organization_level, office, working_hours, "admin", "enable");
+        const user = new User(email, encryptedPassword, phoneNumber, name, familyName, department, organizationLevel, office, workingHour, "admin", "enable");
         haveAdmin = true;
     }
 
     static login(email, password) {
-        if (!(email && password))
-            throw "please fill all the information"
-
         const user = User.findObjectByKey("email", email);
         if (user && bcrypt.compare(password, user.password)) {
             user.token = Token.createToken(user, email)
@@ -44,9 +41,21 @@ class Admin extends User {
             throw "Invalid Credentials!"
     }
 
-    create_employee(user, name, family_name, email, password, phone_number, department, organization_level, office, working_hours, role, status) {
+    setAdminDetail(phoneNumber, name, familyName, department, organizationLevel, office, workingHour, status){
+        this.name = name;
+        this.familyName = familyName;
+        this.phoneNumber = phoneNumber;
+        this.department = department;
+        this.organizarionLevel = organizationLevel;
+        this.office = office;
+        this.workingHour = workingHour;
+        this.role = "admin";
+        this.status = "enable";
+    }
+
+    createEmployee(user, name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour, role, status) {
         if (user && user.role === "admin")
-            User.signUp(name, family_name, email, password, phone_number, department, organization_level, office, working_hours, role, status);
+            User.signUp(name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour, role, status);
         else throw "Only a logged in admin can create an employee!"
     }
 

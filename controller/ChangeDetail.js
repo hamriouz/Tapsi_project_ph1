@@ -1,30 +1,30 @@
 const User = require("../model/User")
 
 class ChangeDetail {
-    static changeDetailByEmployee(employee, name, family_name, working_hour) {
+    static changeDetailByEmployee(employee, name, familyName, workingHour) {
         if (name)
             employee.name = name;
-        if (family_name)
-            employee.family_name = family_name;
-        if (working_hour)
-            employee.working_hours = working_hour;
+        if (familyName)
+            employee.familyName = familyName;
+        if (workingHour)
+            employee.workingHour = workingHour;
     }
 
-    static changeDetailByAdmin(name, family_name, email, department, organization_level, office, working_hours, role, status) {
+    static changeDetailByAdmin(name, familyName, email, department, organizationLevel, office, workingHour, role, status) {
         let employee = User.findObjectByKey("email", email);
         if (employee !== null) {
             if (name)
                 employee.name = name;
-            if (family_name)
-                employee.family_name = family_name;
+            if (familyName)
+                employee.familyName = familyName;
             if (department)
                 employee.department = department;
-            if (organization_level)
-                employee.organization_level = organization_level;
+            if (organizationLevel)
+                employee.organizationLevel = organizationLevel;
             if (office)
                 employee.office = office;
-            if (working_hours)
-                employee.working_hours = working_hours;
+            if (workingHour)
+                employee.workingHour = workingHour;
             if (role)
                 employee.role = role;
             if (status)

@@ -1,9 +1,11 @@
 class Registration{
-    static registerAdmin(){
+    static createAdmin(){
 
     }
 
-    static registerEmployeeByAdmin(){
+    static createEmployee(){
 
     }
 }
+
+module.exports = Registration;

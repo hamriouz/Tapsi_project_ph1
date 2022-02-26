@@ -3,7 +3,7 @@ const User = require("./model/User");
 
 class Token {
     //check if someone has logged in and return the user that has logged in!
-    static authenticate_actor(token) {
+    static authenticateActor(token) {
         let decoded_token;
         jwt.verify(token, process.env.TOKEN_KEY, {}, function (err, decoded) {
             if (err) throw "Access denied! Please login!"

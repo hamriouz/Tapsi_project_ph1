@@ -1,5 +1,5 @@
 class Exception {
-    static get_status_by_Emessage(message) {
+    static getStatusByExceptionMessage(message) {
         switch (message) {
             case
             "please fill all the information"
