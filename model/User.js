@@ -1,3 +1,4 @@
+
 const bcrypt = require("bcryptjs");
 const Token = require("../Token");
 const ChangeDetail = require("../controller/ChangeDetail");
@@ -7,7 +8,7 @@ const SeeDetail = require("../controller/SeeDetail");
 
 let allEmails = [];
 let allUsers = [];
-// let haveAdmin = false;
+let haveAdmin = false;
 let id = 1;
 
 
@@ -20,6 +21,7 @@ class User {
         allEmails.push(email);
         allUsers.push(this);
     }
+
     /*
     constructor(email, password, phone_number, name, family_name, department, organization_level, office, working_hours, role, status) {
         this.email = email;
@@ -45,6 +47,18 @@ class User {
 
     static addToEmail(email){
         allEmails.push(email)
+    }
+
+    static createAdmin(name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour) {
+        //if admin was already created:
+        if (haveAdmin)
+            throw "Admin has already been created";
+        try {
+            Registration.createAdmin(name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour);
+            haveAdmin = true;
+        } catch (e) {
+            throw e;
+        }
     }
 
     // static setId(){
@@ -89,8 +103,6 @@ class User {
                   workingHour,
                   role,
                   status) {
-        if (!(name && familyName && email && password && phoneNumber && department && organizationLevel && office && workingHour && role && status))
-            throw "please fill all the information"
 
         const repetitiveUser = User.doesEmailExist(email);
 
@@ -115,8 +127,8 @@ class User {
             organizationLevel,
             office,
             workingHour,
-            "admin",
-            "enable");
+            role,
+            status);
     }
 
     static login(email, password) {

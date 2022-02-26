@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const User = require("./model/User");
+const {User} = require("./model/User");
 const Exception = require("./Exception")
 const Admin = require("./model/Admin");
 const Token = require("./Token");
@@ -15,34 +15,35 @@ app.use(bodyParser.json());
 // debug the separation of Admin and User
 // validations can be moved to presentation (view) layer
 // TODO change the response to json format
-// TODO Change the method name so it'll reflect the responsibility (signup is actually create employee and createAdmin)
+// Change the method name so it'll reflect the responsibility (signup is actually create employee and createAdmin)
 // separate each route by its resource
 // use controller and write the main functionality of your program in the controller
 // TODO move this to user class as a static method
-// TODO make the constructors smaller!
-// TODO debug root!!!!!!
+// make the constructors smaller!
+// debug root!!!!!!
 
 
-//TODO INCOMPLETE!
 app.post('/roomManagement/signUp/admin', async (req, res) => {
     const {name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour} = req.body;
     if (!(name && familyName && email && password && phoneNumber && department && organizationLevel && office && workingHour))
         throw new Error("please fill all the information");
 
     try {
-        Admin.signUp(name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour);
+        User.createAdmin(name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour);
         res.status(201).send("Admin was successfully created!");
     }catch (err){
         res.status(Exception.getStatusByExceptionMessage(err)).send(err);
     }
 })
-//TODO INCOMPLETE!
-app.post('/roomManagement/signUp/employee', async (req, res) =>{
+
+app.post('/roomManagement/panelAdmin/signUpEmployee', async (req, res) =>{
     const {name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour, role, status} = req.body;
     if (!(name && familyName && email && password && phoneNumber && department && organizationLevel && office && workingHour && role && status))
         throw new Error("please fill all the information");
+
     try {
         const userRequest = Token.authenticateActor(req.header('Authorization'));
+        actionTakerValidation.validateAdmin(userRequest);
         userRequest.createEmployee(userRequest, name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour, role, status);
         res.status(201).send("Username with email address \"" + email + "\" was successfully created!");
     }catch (err){

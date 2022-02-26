@@ -3,7 +3,7 @@ const Token = require("../Token");
 const SeeDetail = require("../controller/SeeDetail")
 const ChangeDetail = require("../controller/ChangeDetail")
 const {User} = require("./User");
-let haveAdmin = false;
+const Registration = require("../controller/Registration")
 
 
 class Admin extends User {
@@ -11,27 +11,9 @@ class Admin extends User {
         super(email, password);
     }
 
-/*    constructor(email, password, phone_number, name, family_name, department, organization_level, office, working_hours, role, status) {
-        super(email, password, phone_number, name, family_name, department, organization_level, office, working_hours, role, status);
-    }*/
-
-    static signUp(name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour) {
-        //if admin was already created:
-        if (haveAdmin) {
-            throw "Admin has already been created";
-        }
-        //check password
-        if (!Admin.checkPassword(password)) {
-            throw "Your password should be at least 10 characters including alphabetic and numeric.";
-        }
-
-        //hash the password and save it
-        let encryptedPassword = bcrypt.hash(password, 10);
-
-        //create new admin
-        const user = new User(email, encryptedPassword, phoneNumber, name, familyName, department, organizationLevel, office, workingHour, "admin", "enable");
-        haveAdmin = true;
-    }
+    /*    constructor(email, password, phone_number, name, family_name, department, organization_level, office, working_hours, role, status) {
+            super(email, password, phone_number, name, family_name, department, organization_level, office, working_hours, role, status);
+        }*/
 
     static login(email, password) {
         const user = User.findObjectByKey("email", email);
@@ -41,7 +23,7 @@ class Admin extends User {
             throw "Invalid Credentials!"
     }
 
-    setAdminDetail(phoneNumber, name, familyName, department, organizationLevel, office, workingHour, status){
+    setAdminDetail(phoneNumber, name, familyName, department, organizationLevel, office, workingHour) {
         this.name = name;
         this.familyName = familyName;
         this.phoneNumber = phoneNumber;
@@ -53,10 +35,13 @@ class Admin extends User {
         this.status = "enable";
     }
 
-    createEmployee(user, name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour, role, status) {
-        if (user && user.role === "admin")
-            User.signUp(name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour, role, status);
-        else throw "Only a logged in admin can create an employee!"
+    createEmployee(name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour, role, status) {
+        try {
+            Registration.createEmployeeByAdmin(name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour, role, status);
+        } catch (e) {
+            throw e;
+        }
+        User.signUp(name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour, role, status);
     }
 
     view_list_employees() {
@@ -66,7 +51,7 @@ class Admin extends User {
     change_detail_employee(name, family_name, email, department, organization_level, office, working_hours, role, status) {
         try {
             ChangeDetail.changeDetailByAdmin(name, family_name, email, department, organization_level, office, working_hours, role, status);
-        }catch (e){
+        } catch (e) {
             throw e
         }
     }
@@ -74,8 +59,7 @@ class Admin extends User {
     view_detail_one_employee(email) {
         try {
             return SeeDetail.viewDetailOneEmployeeByAdmin(email);
-        }
-        catch (e){
+        } catch (e) {
             throw e
         }
     }
@@ -83,8 +67,7 @@ class Admin extends User {
     enable_disable(email_address) {
         try {
             return ChangeDetail.changeStateByAdmin(email_address)
-        }
-        catch (error){
+        } catch (error) {
             throw error;
         }
     }
