@@ -1,6 +1,7 @@
 const bcrypt = require("bcryptjs");
 const User = require("./User");
 const Token = require("../Token");
+const SeeDetail = require("../controller/SeeDetail")
 
 let haveAdmin = false;
 
@@ -50,7 +51,8 @@ class Admin extends User {
     }
 
     view_list_employees(user) {
-        if (user && user.role === "admin") {
+        SeeDetail.viewListEmployeeByAdmin(user);
+/*        if (user && user.role === "admin") {
             let all_employee = "";
             //TODO ALL USERS RO HANDLE KONAM KE ADD KONE TUSH
             for (let employee in all_users) {
@@ -60,7 +62,7 @@ class Admin extends User {
                 }
             }
             return all_employee;
-        } else throw "Only a logged in admin can do this action!"
+        } else throw "Only a logged in admin can do this action!"*/
     }
 
     change_detail_employee(user, name, family_name, email, department, organization_level, office, working_hours, role, status) {
@@ -88,7 +90,8 @@ class Admin extends User {
     }
 
     view_detail_one_employee(user, email) {
-        if (user && user.role === "admin") {
+        SeeDetail.viewDetailOneEmployeeByAdmin(user, email);
+/*        if (user && user.role === "admin") {
             if (!email)
                 throw "please fill all the information"
             let employee = User.findObjectByKey("email", email);
@@ -104,7 +107,7 @@ class Admin extends User {
                     "Role : " + employee.role + "\n" +
                     "Active / Not Active : " + employee.status;
             } else throw "employee with the given email address doesn't exist!"
-        } else throw "Only a logged in admin can do this action!"
+        } else throw "Only a logged in admin can do this action!"*/
     }
 
     enable_disable(user, email_address) {

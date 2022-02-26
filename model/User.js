@@ -1,6 +1,10 @@
-
 const bcrypt = require("bcryptjs");
 const Token = require("../Token");
+const ChangeDetail = require("../controller/ChangeDetail");
+const Login = require("../controller/Login");
+const Registration = require("../controller/Registration");
+const SeeDetail = require("../controller/SeeDetail");
+
 
 let all_emails = [];
 let all_users = [];
@@ -107,6 +111,11 @@ class User {
     }
 
     get_all_employee(user, department) {
+        try {
+            SeeDetail.getAllEmployeeDepartmentByEmployee(user, department);
+        }catch (exception){
+            throw exception;
+        }/*
         if (user && user.role === "employee") {
             if (user.status === "disable")
                 throw "Your account was disabled! You don't have the permission to take this action!";
@@ -123,11 +132,12 @@ class User {
 
             return all_employees;
         }
-        else throw "Only a logged in employee can do this action!"
+        else throw "Only a logged in employee can do this action!"*/
     }
 
     see_working_hour(user, email_address) {
-        if (user && user.role === "employee") {
+        SeeDetail.workingHourByEmployee(user, email_address);
+/*        if (user && user.role === "employee") {
             if (user.status === "disable")
                 throw "Your account was disabled! You don't have the permission to take this action!";
             let wanted_employee = User.findObjectByKey("email", email_address);
@@ -135,8 +145,14 @@ class User {
                 throw "Employee with the given Email Address doesn't exist!"
             return wanted_employee.working_hours;
         }
-        else throw "Only a logged in employee can do this action!"
+        else throw "Only a logged in employee can do this action!"*/
     }
+
+    static getAllUsers(){
+        return all_users;
+    }
+
+
 }
 
 /*class Admin extends User {
