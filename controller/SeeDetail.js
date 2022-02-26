@@ -1,8 +1,6 @@
 const {User} = require("../model/User");
 
 class SeeDetail {
-    //TODO ALL THE FUNCTIONS ARE JUST COPIED! DEBUGGING NEEDED!!!!!!!!!!
-    //TODO AGE THIS DARE PAK KONAM!
     static viewListEmployeeByAdmin() {
         let all_employee = "";
         for (let employee in User.getAllUsers()) {
@@ -48,7 +46,6 @@ class SeeDetail {
             throw "Employee with the given Email Address doesn't exist!"
         return wanted_employee.working_hours;
     }
-
 }
 
 module.exports = SeeDetail;
