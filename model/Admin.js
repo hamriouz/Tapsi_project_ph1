@@ -1,8 +1,8 @@
 const bcrypt = require("bcryptjs");
-const User = require("./User");
 const Token = require("../Token");
 const SeeDetail = require("../controller/SeeDetail")
 const ChangeDetail = require("../controller/ChangeDetail")
+const {User} = require("./User");
 let haveAdmin = false;
 
 

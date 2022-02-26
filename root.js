@@ -14,12 +14,12 @@ app.use(bodyParser.json());
 
 // each file should contain one class
 // TODO debug the separation of Admin and User
-// TODO validations can be moved to presentation (view) layer
+// validations can be moved to presentation (view) layer
 // TODO change the response to json format
 // TODO Change the method name so it'll reflect the responsibility (signup is actually create employee and createAdmin)
-// TODO separate each route by its resource
-// TODO use controller and write the main functionality of your program in the controller
-// TODO move this to user class as an static method
+// separate each route by its resource
+// use controller and write the main functionality of your program in the controller
+// TODO move this to user class as a static method
 // TODO make the constructors smaller!
 // TODO debug root!!!!!!
 
@@ -27,6 +27,8 @@ app.use(bodyParser.json());
 //TODO INCOMPLETE!
 app.post('/room_management/sign_up/admin', async (req, res) => {
     const {name, family_name, email, password, phone_number, department, organization_level, office, working_hours} = req.body;
+    if (!(name && family_name && email && password && phone_number && department && organization_level && office && working_hours))
+        throw new Error("please fill all the information");
     try {
         Admin.signUp(name, family_name, email, password, phone_number, department, organization_level, office, working_hours);
         res.status(201).send("Admin was successfully created!");
@@ -37,6 +39,8 @@ app.post('/room_management/sign_up/admin', async (req, res) => {
 //TODO INCOMPLETE!
 app.post('/room_management/sign_up/employee', async (req, res) =>{
     const {name, family_name, email, password, phone_number, department, organization_level, office, working_hours, role, status} = req.body;
+    if (!(name && family_name && email && password && phone_number && department && organization_level && office && working_hours && role && status))
+        throw new Error("please fill all the information");
     try {
         const user_request = Token.authenticate_actor(req.header('Authorization'));
         user_request.create_employee(user_request, name, family_name, email, password, phone_number, department, organization_level, office, working_hours, role, status);
@@ -48,6 +52,8 @@ app.post('/room_management/sign_up/employee', async (req, res) =>{
 //TODO INCOMPLETE!
 app.post('/room_management/login/admin', async (req, res) => {
     const {email, password} = req.body;
+    if (!(email && password))
+        throw new Error("please fill all the information");
     try {
         Admin.login(email, password);
         res.header('Authorization', Token.createToken(User.findObjectByKey("email", email), email));
@@ -59,6 +65,8 @@ app.post('/room_management/login/admin', async (req, res) => {
 //TODO INCOMPLETE!
 app.post('/room_management/login/employee', async (req, res) =>{
     const { email, password } = req.body;
+    if (!(email && password))
+        throw new Error("please fill all the information");
     try {
         User.login(email, password);
         res.header('Authorization', Token.createToken(User.findObjectByKey("email", email), email));
@@ -122,7 +130,7 @@ app.post('/room_management/panel_employee/edit', async (req, res) =>{
     try {
         const employee = Token.authenticate_actor(req.header('Authorization'));
         actionTakerValidation.validateEmployee(employee);
-        employee.change_detail(name, family_name, working_hour);
+        employee.change_detail(employee, name, family_name, working_hour);
         res.status(200).send("The employee's detail(s) was changed successfully!")
     }catch (err){
         res.status(Exception.get_status_by_Emessage(err)).send(err);

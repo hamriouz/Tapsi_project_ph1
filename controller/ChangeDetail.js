@@ -1,15 +1,13 @@
 const User = require("../model/User")
 
 class ChangeDetail {
-    //TODO EVERYTHING WAS COPIED! DEBUG!!!!!!!1
-
-    static changeDetailByEmployee(name, family_name, working_hour) {
+    static changeDetailByEmployee(employee, name, family_name, working_hour) {
         if (name)
-            this.name = name;
+            employee.name = name;
         if (family_name)
-            this.family_name = family_name;
+            employee.family_name = family_name;
         if (working_hour)
-            this.working_hours = working_hour;
+            employee.working_hours = working_hour;
     }
 
     static changeDetailByAdmin(name, family_name, email, department, organization_level, office, working_hours, role, status) {
@@ -34,9 +32,9 @@ class ChangeDetail {
         } else throw "Employee with the given Email Address doesn't exist!";
     }
 
-    static changeStateByAdmin(email_address) {
+    static changeStateByAdmin(emailAddress) {
         let enOrDis;
-        let employee = User.findObjectByKey("email", email_address);
+        let employee = User.findObjectByKey("email", emailAddress);
         if (employee !== null) {
             if (employee.status === "enable") {
                 enOrDis = "disabled";
@@ -47,7 +45,6 @@ class ChangeDetail {
             }
             return enOrDis;
         } else throw "employee with the given email address doesn't exist!"
-
     }
 }
 

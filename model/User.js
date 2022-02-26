@@ -45,10 +45,10 @@ class User {
         return isRepetitive;
     }
 
-/*    static checkPassword(given_password) {
-        const password_regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{10,}$/;
-        return password_regex.test(given_password);
-    }*/
+    /*    static checkPassword(given_password) {
+            const password_regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{10,}$/;
+            return password_regex.test(given_password);
+        }*/
 
 
     static findObjectByKey(key, value) {
@@ -60,7 +60,17 @@ class User {
         return null;
     }
 
-    static signUp(name, family_name, email, password, phone_number, department, organization_level, office, working_hours, role, status) {
+    static signUp(name,
+                  family_name,
+                  email,
+                  password,
+                  phone_number,
+                  department,
+                  organization_level,
+                  office,
+                  working_hours,
+                  role,
+                  status) {
         if (!(name && family_name && email && password && phone_number && department && organization_level && office && working_hours && role && status))
             throw "please fill all the information"
 
@@ -78,7 +88,17 @@ class User {
         //hash the password and save it
         let encryptedPassword = bcrypt.hash(password, 10);
 
-        const user = new User(email, encryptedPassword, phone_number, name, family_name, department, organization_level, office, working_hours, "admin", "enable");
+        const user = new User(email,
+            encryptedPassword,
+            phone_number,
+            name,
+            family_name,
+            department,
+            organization_level,
+            office,
+            working_hours,
+            "admin",
+            "enable");
     }
 
     static login(email, password) {
@@ -95,23 +115,19 @@ class User {
             throw "Invalid Credentials!"
     }
 
-    change_detail(name, family_name, working_hour) {
-        ChangeDetail.changeDetailByEmployee(name, family_name, working_hour);
+    change_detail(employee, name, family_name, working_hour) {
+        ChangeDetail.changeDetailByEmployee(employee, name, family_name, working_hour);
     }
 
     get_all_employee(department) {
-        try {
-            return SeeDetail.getAllEmployeeDepartmentByEmployee(department);
-        }catch (exception){
-            throw exception;
-        }
+        return SeeDetail.getAllEmployeeDepartmentByEmployee(department);
     }
 
     see_working_hour(email_address) {
         return SeeDetail.workingHourByEmployee(email_address);
     }
 
-    static getAllUsers(){
+    static getAllUsers() {
         return all_users;
     }
 
@@ -258,9 +274,6 @@ function findObjectByKey(key, value) {
 
 
 module.exports = {checkPassword, User, findObjectByKey};
-
-
-
 
 
 /*valid input:

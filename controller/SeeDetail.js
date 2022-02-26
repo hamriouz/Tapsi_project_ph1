@@ -2,6 +2,7 @@ const {User} = require("../model/User");
 
 class SeeDetail {
     //TODO ALL THE FUNCTIONS ARE JUST COPIED! DEBUGGING NEEDED!!!!!!!!!!
+    //TODO AGE THIS DARE PAK KONAM!
     static viewListEmployeeByAdmin() {
         let all_employee = "";
         for (let employee in User.getAllUsers()) {
@@ -37,7 +38,7 @@ class SeeDetail {
             }
         }
         if (!are_there_any)
-            throw "there aren't any employees in the given department!"
+            all_employees = "there aren't any employees in the selected department"
         return all_employees;
     }
 
