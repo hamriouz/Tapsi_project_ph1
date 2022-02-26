@@ -50,83 +50,34 @@ class Admin extends User {
         else throw "Only a logged in admin can create an employee!"
     }
 
-    view_list_employees(user) {
-        SeeDetail.viewListEmployeeByAdmin(user);
-/*        if (user && user.role === "admin") {
-            let all_employee = "";
-            //TODO ALL USERS RO HANDLE KONAM KE ADD KONE TUSH
-            for (let employee in all_users) {
-                if (employee.status !== "admin") {
-                    all_employee += employee.name + " " + employee.family_name + " : Department = " + employee.department +
-                        " Office = " + employee.office + "\n";
-                }
-            }
-            return all_employee;
-        } else throw "Only a logged in admin can do this action!"*/
+    view_list_employees() {
+        return SeeDetail.viewListEmployeeByAdmin();
     }
 
-    change_detail_employee(user, name, family_name, email, department, organization_level, office, working_hours, role, status) {
-        ChangeDetail.changeDetailByAdmin(user, name, family_name, email, department, organization_level, office, working_hours, role, status);
-        /*        if (user && user.role === "admin") {
-            let employee = User.findObjectByKey("email", email);
-            if (employee !== null) {
-                if (name)
-                    employee.name = name;
-                if (family_name)
-                    employee.family_name = family_name;
-                if (department)
-                    employee.department = department;
-                if (organization_level)
-                    employee.organization_level = organization_level;
-                if (office)
-                    employee.office = office;
-                if (working_hours)
-                    employee.working_hours = working_hours;
-                if (role)
-                    employee.role = role;
-                if (status)
-                    employee.status = status;
-            } else throw "Employee with the given Email Address doesn't exist!";
-        } else throw "Only a logged in admin can do this action!"*/
+    change_detail_employee(name, family_name, email, department, organization_level, office, working_hours, role, status) {
+        try {
+            ChangeDetail.changeDetailByAdmin(name, family_name, email, department, organization_level, office, working_hours, role, status);
+        }catch (e){
+            throw e
+        }
     }
 
-    view_detail_one_employee(user, email) {
-        SeeDetail.viewDetailOneEmployeeByAdmin(user, email);
-/*        if (user && user.role === "admin") {
-            if (!email)
-                throw "please fill all the information"
-            let employee = User.findObjectByKey("email", email);
-            if (employee !== null) {
-                return "Name : " + employee.name + "\n" +
-                    "Family name : " + employee.family_name + "\n" +
-                    "Email :" + email + "\n" +
-                    "Phone number : " + employee.phone_number + "\n" +
-                    "Department : " + employee.department + "\n" +
-                    "Organization Level : " + employee.organization_level + "\n" +
-                    "Office : " + employee.office + "\n" +
-                    "Working Hours : " + employee.working_hours + "\n" +
-                    "Role : " + employee.role + "\n" +
-                    "Active / Not Active : " + employee.status;
-            } else throw "employee with the given email address doesn't exist!"
-        } else throw "Only a logged in admin can do this action!"*/
+    view_detail_one_employee(email) {
+        try {
+            return SeeDetail.viewDetailOneEmployeeByAdmin(email);
+        }
+        catch (e){
+            throw e
+        }
     }
 
-    enable_disable(user, email_address) {
-        ChangeDetail.changeStateByAdmin(user, email_address)
-/*        if (user && user.role === "admin") {
-            let enOrDis;
-            let employee = User.findObjectByKey("email", email_address);
-            if (employee !== null) {
-                if (employee.status === "enable") {
-                    enOrDis = "disabled";
-                    employee.status = "disable"
-                } else {
-                    enOrDis = "enabled";
-                    employee.status = "enable";
-                }
-                return enOrDis;
-            } else throw "employee with the given email address doesn't exist!"
-        } else throw "Only a logged in admin can do this action!"*/
+    enable_disable(email_address) {
+        try {
+            return ChangeDetail.changeStateByAdmin(email_address)
+        }
+        catch (error){
+            throw error;
+        }
     }
 
 }

@@ -95,58 +95,20 @@ class User {
             throw "Invalid Credentials!"
     }
 
-    change_detail(user, name, family_name, working_hour) {
-        ChangeDetail.changeDetailByEmployee(user, name, family_name, working_hour);
-        /*
-        if (user && user.role === "employee") {
-            if (user.status === "disable")
-                throw "Your account was disabled! You don't have the permission to take this action!";
-            if (name)
-                this.name = name;
-            if (family_name)
-                this.family_name = family_name;
-            if (working_hour)
-                this.working_hours = working_hour;
-        }
-        else throw "Only a logged in employee can do this action!"*/
+    change_detail(name, family_name, working_hour) {
+        ChangeDetail.changeDetailByEmployee(name, family_name, working_hour);
     }
 
-    get_all_employee(user, department) {
+    get_all_employee(department) {
         try {
-            SeeDetail.getAllEmployeeDepartmentByEmployee(user, department);
+            return SeeDetail.getAllEmployeeDepartmentByEmployee(department);
         }catch (exception){
             throw exception;
-        }/*
-        if (user && user.role === "employee") {
-            if (user.status === "disable")
-                throw "Your account was disabled! You don't have the permission to take this action!";
-            let all_employees = "";
-            let are_there_any = false;
-            for (let i = 0; i < all_users.length; i++) {
-                if (all_users[i]["department"] === department) {
-                    all_employees += all_users[i]["email"] + "\n";
-                    are_there_any = true;
-                }
-            }
-            if (!are_there_any)
-                throw "there aren't any employees in the given department!"
-
-            return all_employees;
         }
-        else throw "Only a logged in employee can do this action!"*/
     }
 
-    see_working_hour(user, email_address) {
-        SeeDetail.workingHourByEmployee(user, email_address);
-/*        if (user && user.role === "employee") {
-            if (user.status === "disable")
-                throw "Your account was disabled! You don't have the permission to take this action!";
-            let wanted_employee = User.findObjectByKey("email", email_address);
-            if (wanted_employee == null)
-                throw "Employee with the given Email Address doesn't exist!"
-            return wanted_employee.working_hours;
-        }
-        else throw "Only a logged in employee can do this action!"*/
+    see_working_hour(email_address) {
+        return SeeDetail.workingHourByEmployee(email_address);
     }
 
     static getAllUsers(){
