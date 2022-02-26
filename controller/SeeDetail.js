@@ -56,7 +56,7 @@ class SeeDetail {
         if (wantedEmployee == null)
             throw "Employee with the given Email Address doesn't exist!"
         workingHour[email_address] = {
-            "Working Hour": wantedEmployee.workingHour;
+            "Working Hour": wantedEmployee.workingHour
         }
         return workingHour;
     }
