@@ -18,12 +18,12 @@ app.use(bodyParser.json());
 // Change the method name so it'll reflect the responsibility (signup is actually create employee and createAdmin)
 // separate each route by its resource
 // use controller and write the main functionality of your program in the controller
-// TODO move this to user class as a static method
+// move this to user class as a static method
 // make the constructors smaller!
 // debug root!!!!!!
 
 
-app.post('/roomManagement/signUp/admin', async (req, res) => {
+app.post('/roomManagement/signUpAdmin', async (req, res) => {
     const {name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour} = req.body;
     if (!(name && familyName && email && password && phoneNumber && department && organizationLevel && office && workingHour))
         throw new Error("please fill all the information");
@@ -39,7 +39,7 @@ app.post('/roomManagement/signUp/admin', async (req, res) => {
 app.post('/roomManagement/panelAdmin/signUpEmployee', async (req, res) =>{
     const {name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour, role, status} = req.body;
     if (!(name && familyName && email && password && phoneNumber && department && organizationLevel && office && workingHour && role && status))
-        throw new Error("please fill all the information");
+        throw "please fill all the information";
 
     try {
         const userRequest = Token.authenticateActor(req.header('Authorization'));
@@ -50,11 +50,11 @@ app.post('/roomManagement/panelAdmin/signUpEmployee', async (req, res) =>{
         res.status(Exception.getStatusByExceptionMessage(err)).send(err);
     }
 })
-//TODO INCOMPLETE!
+
 app.post('/roomManagement/login/admin', async (req, res) => {
     const {email, password} = req.body;
     if (!(email && password))
-        throw new Error("please fill all the information");
+        throw ("please fill all the information");
     try {
         Admin.login(email, password);
         res.header('Authorization', Token.createToken(User.findObjectByKey("email", email), email));
@@ -63,11 +63,12 @@ app.post('/roomManagement/login/admin', async (req, res) => {
         res.status(Exception.getStatusByExceptionMessage(err)).send(err);
     }
 })
-//TODO INCOMPLETE!
+
 app.post('/roomManagement/login/employee', async (req, res) =>{
     const { email, password } = req.body;
     if (!(email && password))
-        throw new Error("please fill all the information");
+        throw "please fill all the information";
+
     try {
         User.login(email, password);
         res.header('Authorization', Token.createToken(User.findObjectByKey("email", email), email));

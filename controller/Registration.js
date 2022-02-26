@@ -6,9 +6,8 @@ const {checkPassword} = require("../model/User");
 class Registration {
     static createAdmin(name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour) {
         //check password
-        if (!checkPassword(password)) {
+        if (!checkPassword(password))
             throw "Your password should be at least 10 characters including alphabetic and numeric.";
-        }
 
         //hash the password and save it
         let encryptedPassword = bcrypt.hash(password, 10);

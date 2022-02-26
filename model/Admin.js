@@ -1,6 +1,7 @@
 const bcrypt = require("bcryptjs");
 const Token = require("../Token");
 const SeeDetail = require("../controller/SeeDetail")
+const Login = require("../controller/Login")
 const ChangeDetail = require("../controller/ChangeDetail")
 const {User} = require("./User");
 const Registration = require("../controller/Registration")
@@ -41,7 +42,7 @@ class Admin extends User {
         } catch (e) {
             throw e;
         }
-        User.signUp(name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour, role, status);
+        // User.signUp(name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour, role, status);
     }
 
     view_list_employees() {

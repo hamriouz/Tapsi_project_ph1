@@ -132,10 +132,6 @@ class User {
     }
 
     static login(email, password) {
-
-        if (!(email && password))
-            throw "please fill all the information"
-
         const user = User.findObjectByKey("email", email);
         if (user && bcrypt.compare(password, user.password)) {
             if (user.status === "disable")
