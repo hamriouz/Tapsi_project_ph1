@@ -1,8 +1,8 @@
 const superset = require('supertest')
 const Exception = require("./Exception")
-const {User} = require("./model/user");
-const {Admin} = require("./model/user");
-const {checkPassword} = require("./model/user");
+const {User} = require("./model/User");
+const Admin = require("./model/Admin");
+const {checkPassword} = require("./model/User");
 const Token = require("./Token");
 
 

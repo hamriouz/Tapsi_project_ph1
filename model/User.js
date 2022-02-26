@@ -1,9 +1,10 @@
+
 const bcrypt = require("bcryptjs");
 const Token = require("../Token");
 
 let all_emails = [];
 let all_users = [];
-let haveAdmin = false;
+// let haveAdmin = false;
 let id = 1;
 
 
@@ -138,7 +139,7 @@ class User {
     }
 }
 
-class Admin extends User {
+/*class Admin extends User {
     constructor(email, password, phone_number, name, family_name, department, organization_level, office, working_hours, role, status) {
         super(email, password, phone_number, name, family_name, department, organization_level, office, working_hours, role, status);
     }
@@ -260,7 +261,7 @@ class Admin extends User {
         else throw "Only a logged in admin can do this action!"
     }
 
-}
+}*/
 
 function checkPassword(given_password) {
     const password_regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{10,}$/;
@@ -277,7 +278,7 @@ function findObjectByKey(key, value) {
 }
 
 
-module.exports = {checkPassword, User, Admin, findObjectByKey};
+module.exports = {checkPassword, User, findObjectByKey};
 
 
 

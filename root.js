@@ -1,11 +1,23 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const User = require("./model/user");
+const User = require("./model/User");
 const Exception = require("./Exception")
-const Admin = require("./model/user");
+const Admin = require("./model/Admin");
 const Token = require("./Token");
 const app = express();
 app.use(bodyParser.json());
+
+
+
+// each file should contain one class
+// TODO debug the separation of Admin and User
+// TODO validations can be moved to presentation (view) layer
+// TODO change the response to json format
+// TODO Change the method name so it'll reflect the responsibility (signup is actually create employee and createAdmin)
+// TODO separate each route by its resource
+// TODO use controller and write the main functionality of your program in the controller
+// TODO move this to user class as an static method
+
 
 
 app.post('/room_management/sign_up/admin', async (req, res) => {
