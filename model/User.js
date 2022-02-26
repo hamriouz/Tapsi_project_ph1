@@ -5,7 +5,6 @@ const Login = require("../controller/Login");
 const Registration = require("../controller/Registration");
 const SeeDetail = require("../controller/SeeDetail");
 
-
 let all_emails = [];
 let all_users = [];
 // let haveAdmin = false;
@@ -97,6 +96,8 @@ class User {
     }
 
     change_detail(user, name, family_name, working_hour) {
+        ChangeDetail.changeDetailByEmployee(user, name, family_name, working_hour);
+        /*
         if (user && user.role === "employee") {
             if (user.status === "disable")
                 throw "Your account was disabled! You don't have the permission to take this action!";
@@ -107,7 +108,7 @@ class User {
             if (working_hour)
                 this.working_hours = working_hour;
         }
-        else throw "Only a logged in employee can do this action!"
+        else throw "Only a logged in employee can do this action!"*/
     }
 
     get_all_employee(user, department) {

@@ -2,7 +2,7 @@ const bcrypt = require("bcryptjs");
 const User = require("./User");
 const Token = require("../Token");
 const SeeDetail = require("../controller/SeeDetail")
-
+const ChangeDetail = require("../controller/ChangeDetail")
 let haveAdmin = false;
 
 
@@ -66,7 +66,8 @@ class Admin extends User {
     }
 
     change_detail_employee(user, name, family_name, email, department, organization_level, office, working_hours, role, status) {
-        if (user && user.role === "admin") {
+        ChangeDetail.changeDetailByAdmin(user, name, family_name, email, department, organization_level, office, working_hours, role, status);
+        /*        if (user && user.role === "admin") {
             let employee = User.findObjectByKey("email", email);
             if (employee !== null) {
                 if (name)
@@ -86,7 +87,7 @@ class Admin extends User {
                 if (status)
                     employee.status = status;
             } else throw "Employee with the given Email Address doesn't exist!";
-        } else throw "Only a logged in admin can do this action!"
+        } else throw "Only a logged in admin can do this action!"*/
     }
 
     view_detail_one_employee(user, email) {
@@ -111,7 +112,8 @@ class Admin extends User {
     }
 
     enable_disable(user, email_address) {
-        if (user && user.role === "admin") {
+        ChangeDetail.changeStateByAdmin(user, email_address)
+/*        if (user && user.role === "admin") {
             let enOrDis;
             let employee = User.findObjectByKey("email", email_address);
             if (employee !== null) {
@@ -124,7 +126,7 @@ class Admin extends User {
                 }
                 return enOrDis;
             } else throw "employee with the given email address doesn't exist!"
-        } else throw "Only a logged in admin can do this action!"
+        } else throw "Only a logged in admin can do this action!"*/
     }
 
 }
