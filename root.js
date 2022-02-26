@@ -14,8 +14,8 @@ app.use(bodyParser.json());
 // each file should contain one class
 // debug the separation of Admin and User
 // validations can be moved to presentation (view) layer
-// TODO change the response to json format
-// Change the method name so it'll reflect the responsibility (signup is actually create employee and createAdmin)
+// change the response to json format
+// Change the method name, so it'll reflect the responsibility (signup is actually create employee and createAdmin)
 // separate each route by its resource
 // use controller and write the main functionality of your program in the controller
 // move this to user class as a static method

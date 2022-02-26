@@ -1,4 +1,3 @@
-
 const bcrypt = require("bcryptjs");
 const Token = require("../Token");
 const ChangeDetail = require("../controller/ChangeDetail");

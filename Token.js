@@ -9,7 +9,7 @@ class Token {
             if (err) throw "Access denied! Please login!"
             decoded_token = decoded //token info is returned in 'decoded'
         })
-        //TODO INJA NABAYAD USER RETURN KONE!
+        // INJA NABAYAD USER RETURN KONE!
         return User.findObjectByKey("email", decoded_token.email);
     }
 
