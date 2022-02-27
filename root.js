@@ -6,7 +6,7 @@ const Admin = require("./model/Admin");
 const Token = require("./Token");
 const Registration = require("./controller/Registration")
 const actionTakerValidation = require("./validation/actionTakerValidation");
-
+const ActionException = require("./controller/actionException");
 const app = express();
 app.use(bodyParser.json());
 
@@ -27,11 +27,8 @@ let haveAdmin = false;
 
 app.post('/roomManagement/signUpAdmin', async (req, res) => {
     const {name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour} = req.body;
-    if (!(name && familyName && email && password && phoneNumber && department && organizationLevel && office && workingHour))
-        throw new Error("please fill all the information");
-        if (haveAdmin)
-            throw "Admin has already been created";
     try {
+        ActionException.signUpAdmin(name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour, haveAdmin)
         Registration.createAdmin(name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour);
         haveAdmin = true;
         // User.createAdmin(name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour);
@@ -43,10 +40,8 @@ app.post('/roomManagement/signUpAdmin', async (req, res) => {
 
 app.post('/roomManagement/panelAdmin/signUpEmployee', async (req, res) =>{
     const {name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour, role, status} = req.body;
-    if (!(name && familyName && email && password && phoneNumber && department && organizationLevel && office && workingHour && role && status))
-        throw "please fill all the information";
-
     try {
+        ActionException.signUpEmployee(name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour, role, status);
         const userRequest = Token.authenticateActor(req.header('Authorization'));
         actionTakerValidation.validateAdmin(userRequest);
         userRequest.createEmployee(userRequest, name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour, role, status);
@@ -58,9 +53,8 @@ app.post('/roomManagement/panelAdmin/signUpEmployee', async (req, res) =>{
 
 app.post('/roomManagement/login/admin', async (req, res) => {
     const {email, password} = req.body;
-    if (!(email && password))
-        throw ("please fill all the information");
     try {
+        ActionException.login(email, password);
         Admin.login(email, password);
         res.header('Authorization', Token.createToken(User.findObjectByKey("email", email), email));
         res.status(200).send("The admin successfully logged in!");
@@ -71,10 +65,8 @@ app.post('/roomManagement/login/admin', async (req, res) => {
 
 app.post('/roomManagement/login/employee', async (req, res) =>{
     const { email, password } = req.body;
-    if (!(email && password))
-        throw "please fill all the information";
-
     try {
+        ActionException.login(email, password);
         User.login(email, password);
         res.header('Authorization', Token.createToken(User.findObjectByKey("email", email), email));
         res.status(200).send("The admin successfully logged in!");
@@ -95,9 +87,8 @@ app.post('/roomManagement/panelAdmin/listOfEmployees', async (req, res) =>{
 
 app.post('/roomManagement/panelAdmin/enableDisableEmployee', async (req, res) =>{
     const {email} = req.body;
-    if (!email)
-        throw "please fill all the information"
     try {
+        ActionException.emptyEmail(email);
         const userRequest = Token.authenticateActor(req.header('Authorization'));
         actionTakerValidation.validateAdmin(userRequest);
         let EnOrDis = userRequest.enable_disable(email);
@@ -109,8 +100,8 @@ app.post('/roomManagement/panelAdmin/enableDisableEmployee', async (req, res) =>
 
 app.post('/roomManagement/panelAdmin/viewEmployee', async (req, res) =>{
     const { email } = req.body;
-    if (!email) throw "please fill all the information"
     try{
+        ActionException.emptyEmail(email);
         const userRequest = Token.authenticateActor(req.header('Authorization'));
         actionTakerValidation.validateAdmin(userRequest);
         let detail = userRequest.view_detail_one_employee(email)
@@ -146,9 +137,8 @@ app.post('/roomManagement/panelEmployee/edit', async (req, res) =>{
 
 app.post('/roomManagement/panelEmployee/allEmployeeDepartment', async (req, res) =>{
     const { department } = req.body;
-    if (!department)
-        throw "please fill all the information";
     try {
+        ActionException.emptyDepartment(department);
         let employee = Token.authenticateActor(req.header('Authorization'));
         actionTakerValidation.validateEmployee(employee);
         res.status(200).send(employee.get_all_employee(department))
@@ -159,8 +149,8 @@ app.post('/roomManagement/panelEmployee/allEmployeeDepartment', async (req, res)
 
 app.post('/roomManagement/panelEmployee/workingHour',async (req, res) =>{
     const { email } = req.body;
-    if (!email) throw "please fill all the information"
     try {
+        ActionException.emptyEmail(email);
         let employee = Token.authenticateActor(req.header('Authorization'));
         actionTakerValidation.validateEmployee(employee)
         res.status(200).send(employee.see_working_hour(employee, email))
