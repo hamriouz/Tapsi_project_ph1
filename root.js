@@ -42,7 +42,7 @@ app.post('/roomManagement/panelAdmin/signUpEmployee', async (req, res) =>{
     const {name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour, role, status} = req.body;
     try {
         ActionException.signUpEmployee(name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour, role, status);
-        const userRequest = Token.authenticateActor(req.header('Authorization'));
+        const userRequest = User.findObjectByKey("email", Token.authenticateActor(req.header('Authorization')));
         actionTakerValidation.validateAdmin(userRequest);
         userRequest.createEmployee(userRequest, name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour, role, status);
         res.status(201).send("Username with email address \"" + email + "\" was successfully created!");
@@ -77,7 +77,7 @@ app.post('/roomManagement/login/employee', async (req, res) =>{
 
 app.post('/roomManagement/panelAdmin/listOfEmployees', async (req, res) =>{
     try {
-        const userRequest = Token.authenticateActor(req.header('Authorization'));
+        const userRequest = User.findObjectByKey("email", Token.authenticateActor(req.header('Authorization')));
         actionTakerValidation.validateAdmin(userRequest);
         res.status(201).send(userRequest.view_list_employees());
     }catch (err){
@@ -89,7 +89,7 @@ app.post('/roomManagement/panelAdmin/enableDisableEmployee', async (req, res) =>
     const {email} = req.body;
     try {
         ActionException.emptyEmail(email);
-        const userRequest = Token.authenticateActor(req.header('Authorization'));
+        const userRequest = User.findObjectByKey("email", Token.authenticateActor(req.header('Authorization')));
         actionTakerValidation.validateAdmin(userRequest);
         let EnOrDis = userRequest.enable_disable(email);
         res.status(200).send("employee with the email address " + email + " was successfully " + EnOrDis);
@@ -102,7 +102,7 @@ app.post('/roomManagement/panelAdmin/viewEmployee', async (req, res) =>{
     const { email } = req.body;
     try{
         ActionException.emptyEmail(email);
-        const userRequest = Token.authenticateActor(req.header('Authorization'));
+        const userRequest = User.findObjectByKey("email", Token.authenticateActor(req.header('Authorization')));
         actionTakerValidation.validateAdmin(userRequest);
         let detail = userRequest.view_detail_one_employee(email)
         res.status(200).send(detail);
@@ -114,7 +114,7 @@ app.post('/roomManagement/panelAdmin/viewEmployee', async (req, res) =>{
 app.post('/roomManagement/panelAdmin/editEmployee', async (req, res) =>{
     const { name, familyName, email, department, organizationLevel, office, workingHour, role, status } = req.body;
     try {
-        const userRequest = Token.authenticateActor(req.header('Authorization'));
+        const userRequest = User.findObjectByKey("email", Token.authenticateActor(req.header('Authorization')));
         actionTakerValidation.validateAdmin(userRequest);
         userRequest.change_detail_employee(name, familyName,email, department, organizationLevel, office, workingHour, role, status);
         res.status(200).send("The user's detail(s) was successfully edited")
@@ -126,7 +126,7 @@ app.post('/roomManagement/panelAdmin/editEmployee', async (req, res) =>{
 app.post('/roomManagement/panelEmployee/edit', async (req, res) =>{
     const { name, familyName, workingHour } = req.body;
     try {
-        const employee = Token.authenticateActor(req.header('Authorization'));
+        const employee = User.findObjectByKey("email", Token.authenticateActor(req.header('Authorization')));
         actionTakerValidation.validateEmployee(employee);
         employee.change_detail(employee, name, familyName, workingHour);
         res.status(200).send("The employee's detail(s) was changed successfully!")
@@ -139,7 +139,7 @@ app.post('/roomManagement/panelEmployee/allEmployeeDepartment', async (req, res)
     const { department } = req.body;
     try {
         ActionException.emptyDepartment(department);
-        let employee = Token.authenticateActor(req.header('Authorization'));
+        const employee = User.findObjectByKey("email", Token.authenticateActor(req.header('Authorization')));
         actionTakerValidation.validateEmployee(employee);
         res.status(200).send(employee.get_all_employee(department))
     }catch (err){
@@ -151,7 +151,7 @@ app.post('/roomManagement/panelEmployee/workingHour',async (req, res) =>{
     const { email } = req.body;
     try {
         ActionException.emptyEmail(email);
-        let employee = Token.authenticateActor(req.header('Authorization'));
+        const employee = User.findObjectByKey("email", Token.authenticateActor(req.header('Authorization')));
         actionTakerValidation.validateEmployee(employee)
         res.status(200).send(employee.see_working_hour(employee, email))
     }catch (err){

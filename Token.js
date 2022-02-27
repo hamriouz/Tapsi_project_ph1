@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const {User} = require("./model/User");
+// const {User} = require("./model/User");
 
 class Token {
     //check if someone has logged in and return the user that has logged in!
@@ -9,8 +9,7 @@ class Token {
             if (err) throw "Access denied! Please login!"
             decoded_token = decoded //token info is returned in 'decoded'
         })
-        // INJA NABAYAD USER RETURN KONE!
-        return User.findObjectByKey("email", decoded_token.email);
+        return decoded_token.email;
     }
 
     static createToken(user, email) {
