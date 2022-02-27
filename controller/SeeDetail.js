@@ -1,9 +1,9 @@
 const User = require("../model/User");
 
 class SeeDetail {
-    static viewListEmployeeByAdmin() {
+    static viewListEmployeeByAdmin(allUsers) {
         let allEmployee = {};
-        for (let employee in User.getAllUsers()) {
+        for (let employee in allUsers) {
             allEmployee[employee.id] = {
                 "Name": employee.name,
                 "Family name": employee.familyName,
@@ -24,7 +24,7 @@ class SeeDetail {
                 "Email": email,
                 "Phone Number": employee.phoneNumber,
                 "Department": employee.department,
-                "Organization Level": employee.organizarionLevel,
+                "Organization Level": employee.organizationLevel,
                 "Office": employee.office,
                 "Working Hour": employee.workingHour,
                 "Role": employee.role,
@@ -34,13 +34,13 @@ class SeeDetail {
         } else throw "employee with the given email address doesn't exist!"
     }
 
-    static getAllEmployeeDepartmentByEmployee(department) {
+    static getAllEmployeeDepartmentByEmployee(department, allUsers) {
         let allEmployees = {};
         let emails = [];
         let areThereAny = false;
-        for (let i = 0; i < User.getAllUsers().length; i++) {
-            if (User.getAllUsers()[i]["department"] === department) {
-                emails.push(User.getAllUsers()[i]["email"]);
+        for (let i = 0; i < allUsers.length; i++) {
+            if (allUsers[i]["department"] === department) {
+                emails.push(allUsers[i]["email"]);
                 areThereAny = true;
             }
         }
@@ -50,12 +50,9 @@ class SeeDetail {
         return allEmployees;
     }
 
-    static workingHourByEmployee(email_address) {
+    static workingHourByEmployee(wantedEmployee) {
         let workingHour = {};
-        let wantedEmployee = User.findObjectByKey("email", email_address);
-        if (wantedEmployee == null)
-            throw "Employee with the given Email Address doesn't exist!"
-        workingHour[email_address] = {
+        workingHour[wantedEmployee.email] = {
             "Working Hour": wantedEmployee.workingHour
         }
         return workingHour;

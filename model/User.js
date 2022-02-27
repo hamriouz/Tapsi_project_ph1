@@ -2,6 +2,7 @@ const bcrypt = require("bcryptjs");
 const Token = require("../Token");
 const ChangeDetail = require("../controller/ChangeDetail");
 const SeeDetail = require("../controller/SeeDetail");
+const e = require("express");
 
 let allEmails = [];
 let allUsers = [];
@@ -20,27 +21,8 @@ class User {
 
     static removeAllUsers(){
         allUsers.length = 0;
+        allEmails.length = 0;
     }
-
-    static addToAllUsers(user){
-        allUsers.push(user)
-    }
-
-    static addToEmail(email){
-        allEmails.push(email)
-    }
-
-/*    static createAdmin(name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour) {
-        //if admin was already created:
-        if (haveAdmin)
-            throw "Admin has already been created";
-        try {
-            Registration.createAdmin(name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour);
-            haveAdmin = true;
-        } catch (e) {
-            throw e;
-        }
-    }*/
 
     static doesEmailExist(email) {
         let isRepetitive = false;
@@ -75,8 +57,6 @@ class User {
             throw "Invalid Credentials!"
     }
 
-
-
     static getAllUsers() {
         return allUsers;
     }
@@ -86,7 +66,7 @@ class User {
         this.name = name;
         this.familyName = familyName;
         this.department = department;
-        this.organizarionLevel = organizationLevel;
+        this.organizationLevel = organizationLevel;
         this.office = office;
         this.workingHour = workingHour;
         this.role = "employee";
@@ -98,7 +78,7 @@ class User {
         this.familyName = familyName;
         this.phoneNumber = phoneNumber;
         this.department = department;
-        this.organizarionLevel = organizationLevel;
+        this.organizationLevel = organizationLevel;
         this.office = office;
         this.workingHour = workingHour;
         this.role = "admin";
@@ -110,11 +90,14 @@ class User {
     }
 
     get_all_employee(department) {
-        return SeeDetail.getAllEmployeeDepartmentByEmployee(department);
+        return SeeDetail.getAllEmployeeDepartmentByEmployee(department, allUsers);
     }
 
     see_working_hour(email_address) {
-        return SeeDetail.workingHourByEmployee(email_address);
+        let user = User.findObjectByKey("email", email_address)
+        if (!user)
+            throw "Employee with the given Email Address doesn't exist!"
+        return SeeDetail.workingHourByEmployee(user);
     }
 
 }
@@ -137,4 +120,34 @@ module.exports = User;
 	"role": "employee",
 	"status": "bhjbhjb"
 }
+ */
+
+/* get all user return format:
+ [ User {
+        email: 'a',
+        password: Promise { <pending> },
+        _id: 1,
+        phoneNumber: 'a',
+        name: 'a',
+        familyName: 'a',
+        department: 'a',
+        organizarionLevel: 'a',
+        office: 'a',
+        workingHour: 'a',
+        role: 'employee',
+        status: 'a' },
+      User {
+        email: 'aa',
+        password: Promise { <pending> },
+        _id: 2,
+        phoneNumber: 'a',
+        name: 'a',
+        familyName: 'a',
+        department: 'a',
+        organizarionLevel: 'a',
+        office: 'a',
+        workingHour: 'a',
+        role: 'employee',
+        status: 'a' } ]
+
  */

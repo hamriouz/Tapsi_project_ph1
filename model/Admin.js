@@ -39,11 +39,12 @@ class Admin extends User {
     }
 
     view_list_employees() {
-        return SeeDetail.viewListEmployeeByAdmin();
+        return SeeDetail.viewListEmployeeByAdmin(User.getAllUsers());
     }
 
     change_detail_employee(name, family_name, email, department, organization_level, office, working_hours, role, status) {
         try {
+
             ChangeDetail.changeDetailByAdmin(name, family_name, email, department, organization_level, office, working_hours, role, status);
         } catch (e) {
             throw e
