@@ -1,10 +1,9 @@
 const bcrypt = require("bcryptjs");
 const Token = require("../Token");
-const SeeDetail = require("../controller/SeeDetail")
-const ChangeDetail = require("../controller/ChangeDetail")
-const {User} = require("./User");
-const Registration = require("../controller/Registration")
-
+const SeeDetail = require("../controller/SeeDetail");
+const ChangeDetail = require("../controller/ChangeDetail");
+const Registration = require("../controller/Registration");
+const {User} = require("./User")
 
 class Admin extends User {
     constructor(email, password) {
@@ -19,7 +18,7 @@ class Admin extends User {
             throw "Invalid Credentials!"
     }
 
-    setAdminDetail(phoneNumber, name, familyName, department, organizationLevel, office, workingHour) {
+/*    setAdminDetail(phoneNumber, name, familyName, department, organizationLevel, office, workingHour) {
         this.name = name;
         this.familyName = familyName;
         this.phoneNumber = phoneNumber;
@@ -29,7 +28,7 @@ class Admin extends User {
         this.workingHour = workingHour;
         this.role = "admin";
         this.status = "enable";
-    }
+    }*/
 
     createEmployee(name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour, role, status) {
         try {

@@ -4,11 +4,13 @@ const {User} = require("./model/User");
 const Exception = require("./Exception")
 const Admin = require("./model/Admin");
 const Token = require("./Token");
+const Registration = require("./controller/Registration")
 const actionTakerValidation = require("./validation/actionTakerValidation");
 
 const app = express();
 app.use(bodyParser.json());
 
+let haveAdmin = false;
 
 
 // each file should contain one class
@@ -27,9 +29,12 @@ app.post('/roomManagement/signUpAdmin', async (req, res) => {
     const {name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour} = req.body;
     if (!(name && familyName && email && password && phoneNumber && department && organizationLevel && office && workingHour))
         throw new Error("please fill all the information");
-
+        if (haveAdmin)
+            throw "Admin has already been created";
     try {
-        User.createAdmin(name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour);
+        Registration.createAdmin(name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour);
+        haveAdmin = true;
+        // User.createAdmin(name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour);
         res.status(201).send("Admin was successfully created!");
     }catch (err){
         res.status(Exception.getStatusByExceptionMessage(err)).send(err);

@@ -1,7 +1,7 @@
 const bcrypt = require("bcryptjs");
 const {User} = require("../model/User");
-const {Admin} = require("../model/Admin")
-const {checkPassword} = require("../model/User");
+// const {Admin} = require("../model/Admin");
+// const {checkPassword} = require("../model/User");
 
 class Registration {
     static createAdmin(name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour) {
@@ -13,7 +13,10 @@ class Registration {
         let encryptedPassword = bcrypt.hash(password, 10);
 
         //create new admin
-        const admin = new Admin(email, encryptedPassword);
+/*        const admin = new Admin(email, encryptedPassword);
+        admin.setAdminDetail(phoneNumber, name, familyName, department, organizationLevel, office, workingHour)*/
+
+        const admin = new User(email, encryptedPassword);
         admin.setAdminDetail(phoneNumber, name, familyName, department, organizationLevel, office, workingHour)
     }
 
@@ -31,5 +34,11 @@ class Registration {
         employee.setEmployeeDetail(phoneNumber, name, familyName, department, organizationLevel, office, workingHour, role, status)
     }
 }
+
+function checkPassword(givenPassword) {
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{10,}$/;
+    return passwordRegex.test(givenPassword);
+}
+
 
 module.exports = Registration;

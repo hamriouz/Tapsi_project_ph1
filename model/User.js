@@ -28,7 +28,7 @@ class User {
         allEmails.push(email)
     }
 
-    static createAdmin(name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour) {
+/*    static createAdmin(name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour) {
         //if admin was already created:
         if (haveAdmin)
             throw "Admin has already been created";
@@ -38,7 +38,7 @@ class User {
         } catch (e) {
             throw e;
         }
-    }
+    }*/
 
     static doesEmailExist(email) {
         let isRepetitive = false;
@@ -87,6 +87,18 @@ class User {
         this.workingHour = workingHour;
         this.role = "employee";
         this.status = status;
+    }
+
+    setAdminDetail(phoneNumber, name, familyName, department, organizationLevel, office, workingHour) {
+        this.name = name;
+        this.familyName = familyName;
+        this.phoneNumber = phoneNumber;
+        this.department = department;
+        this.organizarionLevel = organizationLevel;
+        this.office = office;
+        this.workingHour = workingHour;
+        this.role = "admin";
+        this.status = "enable";
     }
 
     change_detail(employee, name, familyName, workingHour) {

@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const User = require("./model/User");
+const {User} = require("./model/User");
 
 class Token {
     //check if someone has logged in and return the user that has logged in!
