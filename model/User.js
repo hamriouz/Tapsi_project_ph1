@@ -1,7 +1,6 @@
 const bcrypt = require("bcryptjs");
 const Token = require("../Token");
 const ChangeDetail = require("../controller/ChangeDetail");
-const Registration = require("../controller/Registration");
 const SeeDetail = require("../controller/SeeDetail");
 
 let allEmails = [];
@@ -115,22 +114,7 @@ class User {
 
 }
 
-function checkPassword(givenPassword) {
-    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{10,}$/;
-    return passwordRegex.test(givenPassword);
-}
-
-function findObjectByKey(key, value) {
-    for (let i = 0; i < allUsers.length; i++) {
-        if (allUsers[i][key] === value) {
-            return allUsers[i];
-        }
-    }
-    return null;
-}
-
-
-module.exports = {checkPassword, User, findObjectByKey};
+module.exports = User;
 
 
 /*valid input:

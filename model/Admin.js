@@ -2,8 +2,8 @@ const bcrypt = require("bcryptjs");
 const Token = require("../Token");
 const SeeDetail = require("../controller/SeeDetail");
 const ChangeDetail = require("../controller/ChangeDetail");
-const Registration = require("../controller/Registration");
-const {User} = require("./User")
+const {Registration} = require("../controller/Registration");
+const User = require("./User")
 
 class Admin extends User {
     constructor(email, password) {

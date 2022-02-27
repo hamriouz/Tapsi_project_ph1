@@ -1,11 +1,15 @@
 const bcrypt = require("bcryptjs");
-const {User} = require("../model/User");
+const User = require("../model/User");
 // const {Admin} = require("../model/Admin");
 // const {checkPassword} = require("../model/User");
 
 class Registration {
-    static createAdmin(name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour) {
+    static  createAdmin(name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour, haveAdmin) {
         //check password
+        // if (haveAdmin)
+        if (User.findObjectByKey("role", "admin"))
+            throw "Admin has already been created";
+
         if (!checkPassword(password))
             throw "Your password should be at least 10 characters including alphabetic and numeric.";
 
@@ -13,10 +17,9 @@ class Registration {
         let encryptedPassword = bcrypt.hash(password, 10);
 
         //create new admin
-/*        const admin = new Admin(email, encryptedPassword);
-        admin.setAdminDetail(phoneNumber, name, familyName, department, organizationLevel, office, workingHour)*/
-
-        const admin = new User(email, encryptedPassword);
+        /*        const admin = new Admin(email, encryptedPassword);
+                admin.setAdminDetail(phoneNumber, name, familyName, department, organizationLevel, office, workingHour)*/
+        let admin = new User(email, encryptedPassword);
         admin.setAdminDetail(phoneNumber, name, familyName, department, organizationLevel, office, workingHour)
     }
 
@@ -41,4 +44,4 @@ function checkPassword(givenPassword) {
 }
 
 
-module.exports = Registration;
+module.exports = {Registration, checkPassword};

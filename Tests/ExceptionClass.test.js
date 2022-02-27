@@ -1,57 +1,5 @@
-const superset = require('supertest')
-const Exception = require("./Exception")
-const {User} = require("./model/User");
-const Admin = require("./model/Admin");
-const {checkPassword} = require("./model/User");
-const Token = require("./Token");
-
-
-
-//Testing the signup admin!
-test('should throw an error if some of the fields dont have information', () => {
-    expect(() => {
-        User.createAdmin("name", "", "name@gmail.com", "kkkkkkkkkkkkkkkkkkkkkkk555555555555555555", 989123456789, "CX", "kkkkkkkkkkkkkkkkkkkk", "aaaaa", "9-18");
-    }).toThrow("please fill all the information");
-})
-test('should throw an error if the given password was weak', () => {
-    expect(() => {
-        User.createAdmin("name", "family", "name@gmail.com", "k", 989123456789, "CX", "kkkkkkkkkkkkkkkkkkkk", "aaaaa", "9-18");
-    }).toThrow("Your password should be at least 10 characters including alphabetic and numeric.");
-})
-test("create an admin without throwing exceptions", () => {
-    User.createAdmin("name", "family", "name@gmail.com", "kkkkkkkkkk121212", 989123456789, "CX", "kkkkkkkkkkkkkkkkkkkk", "aaaaa", "9-18");
-
-    expect(User.findObjectByKey("email", "name@gmail.com")).not.toBeNull();
-})
-test('should throw an error if an admin has already been created', () => {
-    User.createAdmin("name", "family", "name@gmail.com", "kkkkkkkkkk121212", 989123456789, "CX", "kkkkkkkkkkkkkkkkkkkk", "aaaaa", "9-18");
-
-    expect(() => {
-        Admin.createAdmin("name", "family", "nammmmme@gmail.com", "kllllllllll1212", 989123456789, "CX", "kkkkkkkkkkkkkkkkkkkk", "aaaaa", "9-18");
-    }).toThrow("Admin has already been created");
-})
-
-
-//Testing the signup user!
-test()
-
-
-//Testing the check password function
-test("Return false because the password doesn't contain number", () => {
-    expect(checkPassword("mnmnmmmnmmm")).toBe(false);
-});
-test("Return false because the password doesn't contain letter", () => {
-    expect(checkPassword("1234567890")).toBe(false);
-});
-test("Return false because the password doesn't contain 10 characters", () => {
-    expect(checkPassword("mjk123")).toBe(false);
-});
-test("Return true", () => {
-    expect(checkPassword("mnbv12lkjh")).toBe(true);
-});
-
-
 //Testing the return values of the Exception class
+const Exception = require("../Exception");
 test('when exception "please fill all the information" is thrown status should be 400', () => {
     expect(Exception.getStatusByExceptionMessage("please fill all the information")).toBe(400);
 });

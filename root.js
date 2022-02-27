@@ -1,10 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const {User} = require("./model/User");
+const User = require("./model/User");
 const Exception = require("./Exception")
 const Admin = require("./model/Admin");
 const Token = require("./Token");
-const Registration = require("./controller/Registration")
+const {Registration} = require("./controller/Registration")
 const actionTakerValidation = require("./validation/actionTakerValidation");
 const ActionException = require("./controller/actionException");
 const app = express();
@@ -29,8 +29,8 @@ app.post('/roomManagement/signUpAdmin', async (req, res) => {
     const {name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour} = req.body;
     try {
         ActionException.signUpAdmin(name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour, haveAdmin)
-        Registration.createAdmin(name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour);
         haveAdmin = true;
+        Registration.createAdmin(name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour, haveAdmin);
         // User.createAdmin(name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour);
         res.status(201).send("Admin was successfully created!");
     }catch (err){
