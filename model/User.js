@@ -8,7 +8,6 @@ let allUsers = [];
 let haveAdmin = false;
 let id = 1;
 
-
 class User {
     constructor(email, password) {
         this.email = email;
@@ -17,6 +16,10 @@ class User {
         id++;
         allEmails.push(email);
         allUsers.push(this);
+    }
+
+    static removeAllUsers(){
+        allUsers.length = 0;
     }
 
     static addToAllUsers(user){
@@ -71,6 +74,8 @@ class User {
         } else
             throw "Invalid Credentials!"
     }
+
+
 
     static getAllUsers() {
         return allUsers;
