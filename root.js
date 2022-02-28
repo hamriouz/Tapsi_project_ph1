@@ -13,7 +13,7 @@ app.use(bodyParser.json());
 
 let haveAdmin = false;
 
-
+//TODO test baraye token o root?
 // each file should contain one class
 // debug the separation of Admin and User
 // validations can be moved to presentation (view) layer
@@ -29,7 +29,7 @@ let haveAdmin = false;
 app.post('/roomManagement/signUpAdmin', async (req, res) => {
     const {name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour} = req.body;
     try {
-        ActionException.signUpAdmin(name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour, haveAdmin)
+        ActionException.signUpAdmin(name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour)
         haveAdmin = true;
         CreateAdmin.createAdmin(User.findObjectByKey("role", "admin"), name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour);
         // User.createAdmin(name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour);

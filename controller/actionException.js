@@ -1,9 +1,7 @@
 class ActionException{
-    static signUpAdmin(name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour, haveAdmin){
+    static signUpAdmin(name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour){
         if (!(name && familyName && email && password && phoneNumber && department && organizationLevel && office && workingHour))
-            throw new Error("please fill all the information");
-        if (haveAdmin)
-            throw "Admin has already been created";
+            throw ("please fill all the information");
     }
 
     static signUpEmployee(name, familyName, email, password, phoneNumber, department, organizationLevel, office, workingHour, role, status){
