@@ -6,7 +6,6 @@ const e = require("express");
 
 let allEmails = [];
 let allUsers = [];
-let haveAdmin = false;
 let id = 1;
 
 class User {
@@ -61,7 +60,7 @@ class User {
         return allUsers;
     }
 
-    setEmployeeDetail(phoneNumber, name, familyName, department, organizationLevel, office, workingHour, status){
+    setEmployeeDetail(phoneNumber, name, familyName, department, organizationLevel, office, workingHour,role, status){
         this.phoneNumber = phoneNumber;
         this.name = name;
         this.familyName = familyName;

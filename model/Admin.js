@@ -53,7 +53,7 @@ class Admin extends User {
 
     view_detail_one_employee(email) {
         try {
-            return SeeDetail.viewDetailOneEmployeeByAdmin(email);
+            return SeeDetail.viewDetailOneEmployeeByAdmin(email, User.findObjectByKey("email", email));
         } catch (e) {
             throw e
         }

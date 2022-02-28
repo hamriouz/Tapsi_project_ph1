@@ -1,21 +1,31 @@
-const User = require("../model/User");
+// const User = require("../model/User");
 
 class SeeDetail {
     static viewListEmployeeByAdmin(allUsers) {
         let allEmployee = {};
-        for (let employee in allUsers) {
-            allEmployee[employee.id] = {
-                "Name": employee.name,
-                "Family name": employee.familyName,
-                "Department": employee.department,
-                "Office": employee.office
-            }
+        for (let i = 0; i < allUsers.length; i++) {
+            let employee = allUsers[i];
+            allEmployee[employee.email] = {
+                        "Name": employee.name,
+                        "Family name": employee.familyName,
+                        "Department": employee.department,
+                        "Office": employee.office,
+                    }
         }
+        // for (let employee in allUsers) {
+        //     const index = employee.id
+        //     allEmployee.index = {
+        //         "Name": employee.name,
+        //         "Family name": employee.familyName,
+        //         "Department": employee.department,
+        //         "Office": employee.office
+        //     }
+        // }
         return allEmployee;
     }
 
-    static viewDetailOneEmployeeByAdmin(email) {
-        let employee = User.findObjectByKey("email", email);
+    static viewDetailOneEmployeeByAdmin(email, employee) {
+        // let employee = User.findObjectByKey("email", email);
         let detail = {};
         if (employee !== null) {
             detail[email] = {
